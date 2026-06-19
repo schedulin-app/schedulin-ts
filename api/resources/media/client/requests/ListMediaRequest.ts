@@ -7,7 +7,7 @@ import type * as Schedulin from "../../../../index.js";
  *     {}
  */
 export interface ListMediaRequest {
-    cursor?: Schedulin.ListMediaRequestCursor | null;
+    page?: number;
     limit?: number;
     q?: string;
     type?: Schedulin.ListMediaRequestType;

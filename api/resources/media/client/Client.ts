@@ -179,7 +179,7 @@ export class MediaClient {
     }
 
     /**
-     * List media for the organization with cursor pagination, search, type and tag filters
+     * List media for the organization with page pagination, search, type and tag filters
      *
      * @param {Schedulin.ListMediaRequest} request
      * @param {MediaClient.RequestOptions} requestOptions - Request-specific configuration.
@@ -193,17 +193,17 @@ export class MediaClient {
     public list(
         request: Schedulin.ListMediaRequest = {},
         requestOptions?: MediaClient.RequestOptions,
-    ): core.HttpResponsePromise<unknown> {
+    ): core.HttpResponsePromise<Schedulin.ListMediaResponse> {
         return core.HttpResponsePromise.fromPromise(this.__list(request, requestOptions));
     }
 
     private async __list(
         request: Schedulin.ListMediaRequest = {},
         requestOptions?: MediaClient.RequestOptions,
-    ): Promise<core.WithRawResponse<unknown>> {
-        const { cursor, limit, q, type: type_, tagIds, tagMode } = request;
+    ): Promise<core.WithRawResponse<Schedulin.ListMediaResponse>> {
+        const { page, limit, q, type: type_, tagIds, tagMode } = request;
         const _queryParams: Record<string, unknown> = {
-            cursor,
+            page,
             limit,
             q,
             type: type_ != null ? type_ : undefined,
@@ -237,7 +237,7 @@ export class MediaClient {
             logging: this._options.logging,
         });
         if (_response.ok) {
-            return { data: _response.body, rawResponse: _response.rawResponse };
+            return { data: _response.body as Schedulin.ListMediaResponse, rawResponse: _response.rawResponse };
         }
 
         if (_response.error.reason === "status-code") {
