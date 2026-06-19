@@ -1,5 +1,6 @@
 export type { AnalyticsSeriesPostsRequest } from "./AnalyticsSeriesPostsRequest.js";
 export type { AnalyticsSummaryPostsRequest } from "./AnalyticsSummaryPostsRequest.js";
+export type { CountByTabPostsRequest } from "./CountByTabPostsRequest.js";
 export type { DeletePostsRequest } from "./DeletePostsRequest.js";
 export type { GetJobStatusPostsRequest } from "./GetJobStatusPostsRequest.js";
 export type { ListPostsRequest } from "./ListPostsRequest.js";
@@ -8,4 +9,3 @@ export type { PublishDraftPostsRequest } from "./PublishDraftPostsRequest.js";
 export type { RetrievePostsRequest } from "./RetrievePostsRequest.js";
 export { UpdatePostsRequest } from "./UpdatePostsRequest.js";
 export type { UpdateTagsPostsRequest } from "./UpdateTagsPostsRequest.js";
-export type { V0PostCountByTabRequest } from "./V0PostCountByTabRequest.js";

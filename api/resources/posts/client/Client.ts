@@ -192,24 +192,24 @@ export class PostsClient {
     /**
      * Returns counts of posts for the Queue, Drafts, Approvals, and Sent tabs
      *
-     * @param {Schedulin.V0PostCountByTabRequest} request
+     * @param {Schedulin.CountByTabPostsRequest} request
      * @param {PostsClient.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link Schedulin.UnauthorizedError}
      * @throws {@link Schedulin.InternalServerError}
      *
      * @example
-     *     await client.posts.v0PostCountByTab()
+     *     await client.posts.countByTab()
      */
-    public v0PostCountByTab(
-        request: Schedulin.V0PostCountByTabRequest = {},
+    public countByTab(
+        request: Schedulin.CountByTabPostsRequest = {},
         requestOptions?: PostsClient.RequestOptions,
     ): core.HttpResponsePromise<unknown> {
-        return core.HttpResponsePromise.fromPromise(this.__v0PostCountByTab(request, requestOptions));
+        return core.HttpResponsePromise.fromPromise(this.__countByTab(request, requestOptions));
     }
 
-    private async __v0PostCountByTab(
-        request: Schedulin.V0PostCountByTabRequest = {},
+    private async __countByTab(
+        request: Schedulin.CountByTabPostsRequest = {},
         requestOptions?: PostsClient.RequestOptions,
     ): Promise<core.WithRawResponse<unknown>> {
         const { socialAccountIds } = request;

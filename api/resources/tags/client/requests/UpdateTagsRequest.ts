@@ -3,13 +3,11 @@
 /**
  * @example
  *     {
- *         id: "id",
- *         name: "name",
- *         color: "color"
+ *         id: "id"
  *     }
  */
 export interface UpdateTagsRequest {
     id: string;
-    name: string;
-    color: string;
+    name?: string;
+    color?: string;
 }

@@ -194,9 +194,7 @@ export class TagsClient {
      *
      * @example
      *     await client.tags.update({
-     *         id: "id",
-     *         name: "name",
-     *         color: "color"
+     *         id: "id"
      *     })
      */
     public update(

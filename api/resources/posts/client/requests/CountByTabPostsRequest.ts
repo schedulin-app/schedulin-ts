@@ -4,6 +4,6 @@
  * @example
  *     {}
  */
-export interface V0PostCountByTabRequest {
+export interface CountByTabPostsRequest {
     socialAccountIds?: string | string[];
 }
