@@ -355,11 +355,15 @@ export class MediaClient {
      * @example
      *     await client.media.countByTag()
      */
-    public countByTag(requestOptions?: MediaClient.RequestOptions): core.HttpResponsePromise<unknown> {
+    public countByTag(
+        requestOptions?: MediaClient.RequestOptions,
+    ): core.HttpResponsePromise<Schedulin.CountByTagMediaResponse> {
         return core.HttpResponsePromise.fromPromise(this.__countByTag(requestOptions));
     }
 
-    private async __countByTag(requestOptions?: MediaClient.RequestOptions): Promise<core.WithRawResponse<unknown>> {
+    private async __countByTag(
+        requestOptions?: MediaClient.RequestOptions,
+    ): Promise<core.WithRawResponse<Schedulin.CountByTagMediaResponse>> {
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
         const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             _authRequest.headers,
@@ -383,7 +387,7 @@ export class MediaClient {
             logging: this._options.logging,
         });
         if (_response.ok) {
-            return { data: _response.body, rawResponse: _response.rawResponse };
+            return { data: _response.body as Schedulin.CountByTagMediaResponse, rawResponse: _response.rawResponse };
         }
 
         if (_response.error.reason === "status-code") {
@@ -411,7 +415,7 @@ export class MediaClient {
     }
 
     /**
-     * Generate AWS S3 presigned post for secure file uploads
+     * Returns a presigned PUT URL. Upload by issuing an HTTP PUT of the raw file bytes to `url` with a `Content-Type` header matching `contentType`, then reference the returned `key` when creating a post.
      *
      * @param {Schedulin.CreatePresignedPost} request
      * @param {MediaClient.RequestOptions} requestOptions - Request-specific configuration.

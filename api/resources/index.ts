@@ -9,3 +9,4 @@ export * as socialAccounts from "./socialAccounts/index.js";
 export * from "./socialAccounts/types/index.js";
 export * from "./tags/client/requests/index.js";
 export * as tags from "./tags/index.js";
+export * from "./tags/types/index.js";

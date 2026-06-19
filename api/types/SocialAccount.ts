@@ -5,15 +5,9 @@ import type * as Schedulin from "../index.js";
 export interface SocialAccount {
     id: string;
     platform: Schedulin.SocialPlatform;
-    accountId: string;
-    scope: string;
     imageUrl: string | null;
     imageProcessingStatus: Schedulin.ImageProcessingStatus;
     username: string | null;
-    platformData?: (unknown | null) | undefined;
-    tokenExpiresAt: string | null;
-    userId: string;
-    lastRefreshAt: string | null;
     status: SocialAccount.Status;
     disconnectedReason: Schedulin.SocialAccountDisconnectedReason | null;
     createdAt: string;

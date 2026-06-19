@@ -2,5 +2,13 @@
 
 export interface PresignedPost {
     url: string;
-    fields: Record<string, string>;
+    key: string;
+    method: PresignedPost.Method;
+}
+
+export namespace PresignedPost {
+    export const Method = {
+        Put: "PUT",
+    } as const;
+    export type Method = (typeof Method)[keyof typeof Method];
 }

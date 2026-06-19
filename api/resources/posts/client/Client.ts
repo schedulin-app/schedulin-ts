@@ -45,11 +45,11 @@ export class PostsClient {
         request: Schedulin.ListPostsRequest = {},
         requestOptions?: PostsClient.RequestOptions,
     ): Promise<core.WithRawResponse<Schedulin.ListPostsResponse>> {
-        const { cursor, page, status, scheduledAt, tagIds, tagMode, socialAccountIds, limit } = request;
+        const { page, status, approvalStatus, scheduledAt, tagIds, tagMode, socialAccountIds, limit } = request;
         const _queryParams: Record<string, unknown> = {
-            cursor,
             page,
             status: status != null ? status : undefined,
+            approvalStatus: approvalStatus != null ? approvalStatus : undefined,
             scheduledAt,
             tagIds,
             tagMode: tagMode != null ? tagMode : undefined,
@@ -122,10 +122,7 @@ export class PostsClient {
      * @example
      *     await client.posts.create({
      *         caption: "caption",
-     *         socialAccountId: "socialAccountId",
-     *         media: [{
-     *                 url: "url"
-     *             }]
+     *         socialAccountId: "socialAccountId"
      *     })
      */
     public create(
@@ -190,6 +187,87 @@ export class PostsClient {
         }
 
         return handleNonStatusCodeError(_response.error, _response.rawResponse, "POST", "/v0/posts");
+    }
+
+    /**
+     * Returns counts of posts for the Queue, Drafts, Approvals, and Sent tabs
+     *
+     * @param {Schedulin.V0PostCountByTabRequest} request
+     * @param {PostsClient.RequestOptions} requestOptions - Request-specific configuration.
+     *
+     * @throws {@link Schedulin.UnauthorizedError}
+     * @throws {@link Schedulin.InternalServerError}
+     *
+     * @example
+     *     await client.posts.v0PostCountByTab()
+     */
+    public v0PostCountByTab(
+        request: Schedulin.V0PostCountByTabRequest = {},
+        requestOptions?: PostsClient.RequestOptions,
+    ): core.HttpResponsePromise<unknown> {
+        return core.HttpResponsePromise.fromPromise(this.__v0PostCountByTab(request, requestOptions));
+    }
+
+    private async __v0PostCountByTab(
+        request: Schedulin.V0PostCountByTabRequest = {},
+        requestOptions?: PostsClient.RequestOptions,
+    ): Promise<core.WithRawResponse<unknown>> {
+        const { socialAccountIds } = request;
+        const _queryParams: Record<string, unknown> = {
+            socialAccountIds,
+        };
+        const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
+        const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            _authRequest.headers,
+            this._options?.headers,
+            requestOptions?.headers,
+        );
+        const _response = await core.fetcher({
+            url: core.url.join(
+                (await core.Supplier.get(this._options.baseUrl)) ??
+                    (await core.Supplier.get(this._options.environment)) ??
+                    environments.SchedulinEnvironment.Default,
+                "v0/posts/counts/by-tab",
+            ),
+            method: "GET",
+            headers: _headers,
+            queryString: core.url
+                .queryBuilder()
+                .addMany(_queryParams)
+                .mergeAdditional(requestOptions?.queryParams)
+                .build(),
+            timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
+            maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
+            abortSignal: requestOptions?.abortSignal,
+            fetchFn: this._options?.fetch,
+            logging: this._options.logging,
+        });
+        if (_response.ok) {
+            return { data: _response.body, rawResponse: _response.rawResponse };
+        }
+
+        if (_response.error.reason === "status-code") {
+            switch (_response.error.statusCode) {
+                case 401:
+                    throw new Schedulin.UnauthorizedError(
+                        _response.error.body as Schedulin.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 500:
+                    throw new Schedulin.InternalServerError(
+                        _response.error.body as Schedulin.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                default:
+                    throw new errors.SchedulinError({
+                        statusCode: _response.error.statusCode,
+                        body: _response.error.body,
+                        rawResponse: _response.rawResponse,
+                    });
+            }
+        }
+
+        return handleNonStatusCodeError(_response.error, _response.rawResponse, "GET", "/v0/posts/counts/by-tab");
     }
 
     /**
@@ -527,14 +605,14 @@ export class PostsClient {
     public analyticsSeries(
         request: Schedulin.AnalyticsSeriesPostsRequest,
         requestOptions?: PostsClient.RequestOptions,
-    ): core.HttpResponsePromise<Schedulin.AnalyticsSeriesPostsResponseItem[]> {
+    ): core.HttpResponsePromise<Schedulin.AnalyticsSeriesPostsResponse> {
         return core.HttpResponsePromise.fromPromise(this.__analyticsSeries(request, requestOptions));
     }
 
     private async __analyticsSeries(
         request: Schedulin.AnalyticsSeriesPostsRequest,
         requestOptions?: PostsClient.RequestOptions,
-    ): Promise<core.WithRawResponse<Schedulin.AnalyticsSeriesPostsResponseItem[]>> {
+    ): Promise<core.WithRawResponse<Schedulin.AnalyticsSeriesPostsResponse>> {
         const { id, limit } = request;
         const _queryParams: Record<string, unknown> = {
             limit,
@@ -567,7 +645,7 @@ export class PostsClient {
         });
         if (_response.ok) {
             return {
-                data: _response.body as Schedulin.AnalyticsSeriesPostsResponseItem[],
+                data: _response.body as Schedulin.AnalyticsSeriesPostsResponse,
                 rawResponse: _response.rawResponse,
             };
         }

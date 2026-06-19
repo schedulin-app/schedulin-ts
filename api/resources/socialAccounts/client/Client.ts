@@ -35,13 +35,13 @@ export class SocialAccountsClient {
      */
     public list(
         requestOptions?: SocialAccountsClient.RequestOptions,
-    ): core.HttpResponsePromise<Schedulin.ListSocialAccountsResponseItem[]> {
+    ): core.HttpResponsePromise<Schedulin.ListSocialAccountsResponse> {
         return core.HttpResponsePromise.fromPromise(this.__list(requestOptions));
     }
 
     private async __list(
         requestOptions?: SocialAccountsClient.RequestOptions,
-    ): Promise<core.WithRawResponse<Schedulin.ListSocialAccountsResponseItem[]>> {
+    ): Promise<core.WithRawResponse<Schedulin.ListSocialAccountsResponse>> {
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
         const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             _authRequest.headers,
@@ -65,10 +65,7 @@ export class SocialAccountsClient {
             logging: this._options.logging,
         });
         if (_response.ok) {
-            return {
-                data: _response.body as Schedulin.ListSocialAccountsResponseItem[],
-                rawResponse: _response.rawResponse,
-            };
+            return { data: _response.body as Schedulin.ListSocialAccountsResponse, rawResponse: _response.rawResponse };
         }
 
         if (_response.error.reason === "status-code") {
@@ -348,31 +345,31 @@ export class SocialAccountsClient {
     }
 
     /**
-     * Fetch the latest profile information from the connected platform and update the social account
+     * List the boards for a connected Pinterest account. Use a board id in `platformConfiguration.board_ids` when creating a Pinterest post.
      *
-     * @param {Schedulin.RefreshProfileSocialAccountsRequest} request
+     * @param {Schedulin.PinterestBoardsSocialAccountsRequest} request
      * @param {SocialAccountsClient.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link Schedulin.UnauthorizedError}
      * @throws {@link Schedulin.InternalServerError}
      *
      * @example
-     *     await client.socialAccounts.refreshProfile({
+     *     await client.socialAccounts.pinterestBoards({
      *         id: "id"
      *     })
      */
-    public refreshProfile(
-        request: Schedulin.RefreshProfileSocialAccountsRequest,
+    public pinterestBoards(
+        request: Schedulin.PinterestBoardsSocialAccountsRequest,
         requestOptions?: SocialAccountsClient.RequestOptions,
-    ): core.HttpResponsePromise<Schedulin.RefreshProfileSocialAccountsResponse> {
-        return core.HttpResponsePromise.fromPromise(this.__refreshProfile(request, requestOptions));
+    ): core.HttpResponsePromise<Schedulin.PinterestBoardsSocialAccountsResponse> {
+        return core.HttpResponsePromise.fromPromise(this.__pinterestBoards(request, requestOptions));
     }
 
-    private async __refreshProfile(
-        request: Schedulin.RefreshProfileSocialAccountsRequest,
+    private async __pinterestBoards(
+        request: Schedulin.PinterestBoardsSocialAccountsRequest,
         requestOptions?: SocialAccountsClient.RequestOptions,
-    ): Promise<core.WithRawResponse<Schedulin.RefreshProfileSocialAccountsResponse>> {
-        const { id, ..._body } = request;
+    ): Promise<core.WithRawResponse<Schedulin.PinterestBoardsSocialAccountsResponse>> {
+        const { id } = request;
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
         const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             _authRequest.headers,
@@ -384,14 +381,11 @@ export class SocialAccountsClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.SchedulinEnvironment.Default,
-                `v0/social-accounts/${core.url.encodePathParam(id)}/refresh`,
+                `v0/social-accounts/${core.url.encodePathParam(id)}/pinterest-boards`,
             ),
-            method: "PUT",
+            method: "GET",
             headers: _headers,
-            contentType: "application/json",
             queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
-            requestType: "json",
-            body: _body,
             timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
             maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
             abortSignal: requestOptions?.abortSignal,
@@ -400,7 +394,7 @@ export class SocialAccountsClient {
         });
         if (_response.ok) {
             return {
-                data: _response.body as Schedulin.RefreshProfileSocialAccountsResponse,
+                data: _response.body as Schedulin.PinterestBoardsSocialAccountsResponse,
                 rawResponse: _response.rawResponse,
             };
         }
@@ -429,8 +423,92 @@ export class SocialAccountsClient {
         return handleNonStatusCodeError(
             _response.error,
             _response.rawResponse,
-            "PUT",
-            "/v0/social-accounts/{id}/refresh",
+            "GET",
+            "/v0/social-accounts/{id}/pinterest-boards",
+        );
+    }
+
+    /**
+     * Fetch the privacy-level options, duration limits, and interaction settings for a connected TikTok account — required to build a valid `platformConfiguration` when creating a TikTok post.
+     *
+     * @param {Schedulin.TiktokCreatorInfoSocialAccountsRequest} request
+     * @param {SocialAccountsClient.RequestOptions} requestOptions - Request-specific configuration.
+     *
+     * @throws {@link Schedulin.UnauthorizedError}
+     * @throws {@link Schedulin.InternalServerError}
+     *
+     * @example
+     *     await client.socialAccounts.tiktokCreatorInfo({
+     *         id: "id"
+     *     })
+     */
+    public tiktokCreatorInfo(
+        request: Schedulin.TiktokCreatorInfoSocialAccountsRequest,
+        requestOptions?: SocialAccountsClient.RequestOptions,
+    ): core.HttpResponsePromise<Schedulin.TiktokCreatorInfoSocialAccountsResponse> {
+        return core.HttpResponsePromise.fromPromise(this.__tiktokCreatorInfo(request, requestOptions));
+    }
+
+    private async __tiktokCreatorInfo(
+        request: Schedulin.TiktokCreatorInfoSocialAccountsRequest,
+        requestOptions?: SocialAccountsClient.RequestOptions,
+    ): Promise<core.WithRawResponse<Schedulin.TiktokCreatorInfoSocialAccountsResponse>> {
+        const { id } = request;
+        const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
+        const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            _authRequest.headers,
+            this._options?.headers,
+            requestOptions?.headers,
+        );
+        const _response = await core.fetcher({
+            url: core.url.join(
+                (await core.Supplier.get(this._options.baseUrl)) ??
+                    (await core.Supplier.get(this._options.environment)) ??
+                    environments.SchedulinEnvironment.Default,
+                `v0/social-accounts/${core.url.encodePathParam(id)}/tiktok-creator-info`,
+            ),
+            method: "GET",
+            headers: _headers,
+            queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
+            timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
+            maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
+            abortSignal: requestOptions?.abortSignal,
+            fetchFn: this._options?.fetch,
+            logging: this._options.logging,
+        });
+        if (_response.ok) {
+            return {
+                data: _response.body as Schedulin.TiktokCreatorInfoSocialAccountsResponse,
+                rawResponse: _response.rawResponse,
+            };
+        }
+
+        if (_response.error.reason === "status-code") {
+            switch (_response.error.statusCode) {
+                case 401:
+                    throw new Schedulin.UnauthorizedError(
+                        _response.error.body as Schedulin.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 500:
+                    throw new Schedulin.InternalServerError(
+                        _response.error.body as Schedulin.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                default:
+                    throw new errors.SchedulinError({
+                        statusCode: _response.error.statusCode,
+                        body: _response.error.body,
+                        rawResponse: _response.rawResponse,
+                    });
+            }
+        }
+
+        return handleNonStatusCodeError(
+            _response.error,
+            _response.rawResponse,
+            "GET",
+            "/v0/social-accounts/{id}/tiktok-creator-info",
         );
     }
 }

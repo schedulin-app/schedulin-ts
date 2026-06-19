@@ -25,7 +25,7 @@ export namespace UpdatePostsRequest {
             name: string;
             url: string;
             mimeType: string;
-            bucket: string;
+            bucket?: string | undefined;
             key: string;
         }
     }

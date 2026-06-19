@@ -6,6 +6,6 @@
  *         id: "id"
  *     }
  */
-export interface RefreshProfileSocialAccountsRequest {
+export interface PinterestBoardsSocialAccountsRequest {
     id: string;
 }

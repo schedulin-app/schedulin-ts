@@ -3,9 +3,11 @@
 export const SocialPlatform = {
     Bluesky: "bluesky",
     Facebook: "facebook",
+    GoogleBusinessProfile: "google_business_profile",
     Instagram: "instagram",
     Linkedin: "linkedin",
     Pinterest: "pinterest",
+    Reddit: "reddit",
     Threads: "threads",
     Tiktok: "tiktok",
     Twitter: "twitter",

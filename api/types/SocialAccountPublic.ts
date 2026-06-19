@@ -6,10 +6,10 @@ export interface SocialAccountPublic {
     id: string;
     platform: Schedulin.SocialPlatform;
     username: string | null;
-    user_id: string;
-    profile_photo_url: string | null;
+    userId: string;
+    profilePhotoUrl: string | null;
     status: SocialAccountPublic.Status;
-    external_id: string | null;
+    externalId: string | null;
 }
 
 export namespace SocialAccountPublic {

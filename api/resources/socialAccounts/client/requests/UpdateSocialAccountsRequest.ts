@@ -8,39 +8,10 @@
  */
 export interface UpdateSocialAccountsRequest {
     id: string;
-    platform?: UpdateSocialAccountsRequest.Platform;
-    accessToken?: string;
-    secretAccessToken?: string | null;
-    refreshToken?: string | null;
-    refreshTokenValid?: boolean;
-    tokenExpiresAt?: string | null;
-    imageUrl?: string;
-    imageProcessingStatus?: UpdateSocialAccountsRequest.ImageProcessingStatus;
-    platformData?: Record<string, unknown>;
-    lastRefreshAt?: string;
     status?: UpdateSocialAccountsRequest.Status;
 }
 
 export namespace UpdateSocialAccountsRequest {
-    export const Platform = {
-        Bluesky: "bluesky",
-        Facebook: "facebook",
-        Instagram: "instagram",
-        Linkedin: "linkedin",
-        Pinterest: "pinterest",
-        Threads: "threads",
-        Tiktok: "tiktok",
-        Twitter: "twitter",
-        Youtube: "youtube",
-    } as const;
-    export type Platform = (typeof Platform)[keyof typeof Platform];
-    export const ImageProcessingStatus = {
-        Pending: "PENDING",
-        Processing: "PROCESSING",
-        Processed: "PROCESSED",
-        Failed: "FAILED",
-    } as const;
-    export type ImageProcessingStatus = (typeof ImageProcessingStatus)[keyof typeof ImageProcessingStatus];
     export const Status = {
         Connected: "connected",
         Disconnected: "disconnected",

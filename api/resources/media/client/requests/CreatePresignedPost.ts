@@ -11,4 +11,14 @@ export interface CreatePresignedPost {
     contentType: string;
     key: string;
     size?: number;
+    intent?: CreatePresignedPost.Intent;
+}
+
+export namespace CreatePresignedPost {
+    export const Intent = {
+        Post: "post",
+        ClipSource: "clip-source",
+        PublicAsset: "public-asset",
+    } as const;
+    export type Intent = (typeof Intent)[keyof typeof Intent];
 }

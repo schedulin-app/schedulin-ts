@@ -12,11 +12,7 @@ export interface MediaSearch {
 export namespace MediaSearch {
     export interface Cursor {
         id: string;
-        updatedAt: Cursor.UpdatedAt;
-    }
-
-    export namespace Cursor {
-        export type UpdatedAt = string | string;
+        updatedAt: string;
     }
 
     export const Type = {

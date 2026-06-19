@@ -8,3 +8,4 @@ export type { PublishDraftPostsRequest } from "./PublishDraftPostsRequest.js";
 export type { RetrievePostsRequest } from "./RetrievePostsRequest.js";
 export { UpdatePostsRequest } from "./UpdatePostsRequest.js";
 export type { UpdateTagsPostsRequest } from "./UpdateTagsPostsRequest.js";
+export type { V0PostCountByTabRequest } from "./V0PostCountByTabRequest.js";

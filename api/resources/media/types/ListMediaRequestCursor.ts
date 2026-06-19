@@ -2,9 +2,5 @@
 
 export interface ListMediaRequestCursor {
     id: string;
-    updatedAt: ListMediaRequestCursor.UpdatedAt;
-}
-
-export namespace ListMediaRequestCursor {
-    export type UpdatedAt = string | string;
+    updatedAt: string;
 }

@@ -4,17 +4,14 @@
  * @example
  *     {
  *         caption: "caption",
- *         socialAccountId: "socialAccountId",
- *         media: [{
- *                 url: "url"
- *             }]
+ *         socialAccountId: "socialAccountId"
  *     }
  */
 export interface PostCreate {
     caption: string;
     scheduledAt?: string | null;
     socialAccountId: string;
-    media: PostCreate.Media.Item[];
+    media?: PostCreate.Media.Item[];
     thumbnail?: PostCreate.Thumbnail;
     platformConfiguration?: Record<string, unknown>;
     tagIds?: string[];
@@ -62,9 +59,11 @@ export namespace PostCreate {
                     export const Platform = {
                         Bluesky: "bluesky",
                         Facebook: "facebook",
+                        GoogleBusinessProfile: "google_business_profile",
                         Instagram: "instagram",
                         Linkedin: "linkedin",
                         Pinterest: "pinterest",
+                        Reddit: "reddit",
                         Threads: "threads",
                         Tiktok: "tiktok",
                         Twitter: "twitter",
@@ -112,9 +111,11 @@ export namespace PostCreate {
                 export const Platform = {
                     Bluesky: "bluesky",
                     Facebook: "facebook",
+                    GoogleBusinessProfile: "google_business_profile",
                     Instagram: "instagram",
                     Linkedin: "linkedin",
                     Pinterest: "pinterest",
+                    Reddit: "reddit",
                     Threads: "threads",
                     Tiktok: "tiktok",
                     Twitter: "twitter",
@@ -129,6 +130,7 @@ export namespace PostCreate {
         Schedule: "schedule",
         Queue: "queue",
         Draft: "draft",
+        Now: "now",
     } as const;
     export type Action = (typeof Action)[keyof typeof Action];
     export type Parts = Parts.Item[];
@@ -179,9 +181,11 @@ export namespace PostCreate {
                             export const Platform = {
                                 Bluesky: "bluesky",
                                 Facebook: "facebook",
+                                GoogleBusinessProfile: "google_business_profile",
                                 Instagram: "instagram",
                                 Linkedin: "linkedin",
                                 Pinterest: "pinterest",
+                                Reddit: "reddit",
                                 Threads: "threads",
                                 Tiktok: "tiktok",
                                 Twitter: "twitter",

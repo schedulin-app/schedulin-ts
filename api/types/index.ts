@@ -6,6 +6,7 @@ export * from "./Media.js";
 export * from "./MediaSearch.js";
 export * from "./MediaSetTags.js";
 export * from "./MediaUpdate.js";
+export * from "./OauthScope.js";
 export * from "./Post.js";
 export * from "./PostApprovalStatus.js";
 export * from "./PostPublishDraft.js";

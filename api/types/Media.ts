@@ -10,7 +10,6 @@ export interface Media {
     duration: number | null;
     createdAt: string;
     updatedAt: string;
-    userId: string;
     bucket: string;
     key: string;
     size: number | null;

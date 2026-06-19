@@ -37,14 +37,14 @@ export class TagsClient {
     public list(
         request: Schedulin.ListTagsRequest = {},
         requestOptions?: TagsClient.RequestOptions,
-    ): core.HttpResponsePromise<Schedulin.Tag[]> {
+    ): core.HttpResponsePromise<Schedulin.ListTagsResponse> {
         return core.HttpResponsePromise.fromPromise(this.__list(request, requestOptions));
     }
 
     private async __list(
         request: Schedulin.ListTagsRequest = {},
         requestOptions?: TagsClient.RequestOptions,
-    ): Promise<core.WithRawResponse<Schedulin.Tag[]>> {
+    ): Promise<core.WithRawResponse<Schedulin.ListTagsResponse>> {
         const { q, limit } = request;
         const _queryParams: Record<string, unknown> = {
             q,
@@ -77,7 +77,7 @@ export class TagsClient {
             logging: this._options.logging,
         });
         if (_response.ok) {
-            return { data: _response.body as Schedulin.Tag[], rawResponse: _response.rawResponse };
+            return { data: _response.body as Schedulin.ListTagsResponse, rawResponse: _response.rawResponse };
         }
 
         if (_response.error.reason === "status-code") {

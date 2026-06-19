@@ -7,9 +7,9 @@ import type * as Schedulin from "../../../../index.js";
  *     {}
  */
 export interface ListPostsRequest {
-    cursor?: Schedulin.ListPostsRequestCursor | null;
     page?: number;
     status?: Schedulin.ListPostsRequestStatus;
+    approvalStatus?: Schedulin.ListPostsRequestApprovalStatus;
     scheduledAt?: Schedulin.ListPostsRequestScheduledAt;
     tagIds?: string | string[];
     tagMode?: Schedulin.ListPostsRequestTagMode;
