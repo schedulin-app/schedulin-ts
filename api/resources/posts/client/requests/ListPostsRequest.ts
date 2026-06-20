@@ -9,6 +9,7 @@ import type * as Schedulin from "../../../../index.js";
 export interface ListPostsRequest {
     page?: number;
     status?: Schedulin.ListPostsRequestStatus;
+    statuses?: Schedulin.ListPostsRequestStatusesItem | Schedulin.ListPostsRequestStatusesItem[];
     approvalStatus?: Schedulin.ListPostsRequestApprovalStatus;
     scheduledAt?: Schedulin.ListPostsRequestScheduledAt;
     tagIds?: string | string[];

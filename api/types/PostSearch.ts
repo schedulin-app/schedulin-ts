@@ -3,6 +3,7 @@
 export interface PostSearch {
     page?: number | undefined;
     status?: PostSearch.Status | undefined;
+    statuses?: PostSearch.Statuses.Item[] | undefined;
     approvalStatus?: PostSearch.ApprovalStatus | undefined;
     scheduledAt?: PostSearch.ScheduledAt | undefined;
     tagIds?: string[] | undefined;
@@ -20,6 +21,19 @@ export namespace PostSearch {
         Failed: "FAILED",
     } as const;
     export type Status = (typeof Status)[keyof typeof Status];
+    export type Statuses = Statuses.Item[];
+
+    export namespace Statuses {
+        export const Item = {
+            Scheduled: "SCHEDULED",
+            Processing: "PROCESSING",
+            Completed: "COMPLETED",
+            Draft: "DRAFT",
+            Failed: "FAILED",
+        } as const;
+        export type Item = (typeof Item)[keyof typeof Item];
+    }
+
     export const ApprovalStatus = {
         Draft: "DRAFT",
         PendingApproval: "PENDING_APPROVAL",

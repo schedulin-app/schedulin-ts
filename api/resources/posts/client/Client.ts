@@ -45,10 +45,12 @@ export class PostsClient {
         request: Schedulin.ListPostsRequest = {},
         requestOptions?: PostsClient.RequestOptions,
     ): Promise<core.WithRawResponse<Schedulin.ListPostsResponse>> {
-        const { page, status, approvalStatus, scheduledAt, tagIds, tagMode, socialAccountIds, limit } = request;
+        const { page, status, statuses, approvalStatus, scheduledAt, tagIds, tagMode, socialAccountIds, limit } =
+            request;
         const _queryParams: Record<string, unknown> = {
             page,
             status: status != null ? status : undefined,
+            statuses: Array.isArray(statuses) ? statuses.map((item) => item) : statuses != null ? statuses : undefined,
             approvalStatus: approvalStatus != null ? approvalStatus : undefined,
             scheduledAt,
             tagIds,
