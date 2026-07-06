@@ -345,6 +345,98 @@ export class SocialAccountsClient {
     }
 
     /**
+     * Return the next available queue slot times (UTC) for a social account, computed from its queue schedule, per-slot capacity, and timezone. Empty when the account has no queue times configured. Use a slot as `scheduledAt`, or pass `action: "queue"` when creating a post to take the next slot automatically.
+     *
+     * @param {Schedulin.NextSlotsSocialAccountsRequest} request
+     * @param {SocialAccountsClient.RequestOptions} requestOptions - Request-specific configuration.
+     *
+     * @throws {@link Schedulin.UnauthorizedError}
+     * @throws {@link Schedulin.InternalServerError}
+     *
+     * @example
+     *     await client.socialAccounts.nextSlots({
+     *         id: "id"
+     *     })
+     */
+    public nextSlots(
+        request: Schedulin.NextSlotsSocialAccountsRequest,
+        requestOptions?: SocialAccountsClient.RequestOptions,
+    ): core.HttpResponsePromise<Schedulin.NextSlotsSocialAccountsResponse> {
+        return core.HttpResponsePromise.fromPromise(this.__nextSlots(request, requestOptions));
+    }
+
+    private async __nextSlots(
+        request: Schedulin.NextSlotsSocialAccountsRequest,
+        requestOptions?: SocialAccountsClient.RequestOptions,
+    ): Promise<core.WithRawResponse<Schedulin.NextSlotsSocialAccountsResponse>> {
+        const { id, limit, after } = request;
+        const _queryParams: Record<string, unknown> = {
+            limit,
+            after,
+        };
+        const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
+        const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            _authRequest.headers,
+            this._options?.headers,
+            requestOptions?.headers,
+        );
+        const _response = await core.fetcher({
+            url: core.url.join(
+                (await core.Supplier.get(this._options.baseUrl)) ??
+                    (await core.Supplier.get(this._options.environment)) ??
+                    environments.SchedulinEnvironment.Default,
+                `v0/social-accounts/${core.url.encodePathParam(id)}/next-slots`,
+            ),
+            method: "GET",
+            headers: _headers,
+            queryString: core.url
+                .queryBuilder()
+                .addMany(_queryParams)
+                .mergeAdditional(requestOptions?.queryParams)
+                .build(),
+            timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
+            maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
+            abortSignal: requestOptions?.abortSignal,
+            fetchFn: this._options?.fetch,
+            logging: this._options.logging,
+        });
+        if (_response.ok) {
+            return {
+                data: _response.body as Schedulin.NextSlotsSocialAccountsResponse,
+                rawResponse: _response.rawResponse,
+            };
+        }
+
+        if (_response.error.reason === "status-code") {
+            switch (_response.error.statusCode) {
+                case 401:
+                    throw new Schedulin.UnauthorizedError(
+                        _response.error.body as Schedulin.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 500:
+                    throw new Schedulin.InternalServerError(
+                        _response.error.body as Schedulin.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                default:
+                    throw new errors.SchedulinError({
+                        statusCode: _response.error.statusCode,
+                        body: _response.error.body,
+                        rawResponse: _response.rawResponse,
+                    });
+            }
+        }
+
+        return handleNonStatusCodeError(
+            _response.error,
+            _response.rawResponse,
+            "GET",
+            "/v0/social-accounts/{id}/next-slots",
+        );
+    }
+
+    /**
      * List the boards for a connected Pinterest account. Use a board id in `platformConfiguration.board_ids` when creating a Pinterest post.
      *
      * @param {Schedulin.PinterestBoardsSocialAccountsRequest} request
