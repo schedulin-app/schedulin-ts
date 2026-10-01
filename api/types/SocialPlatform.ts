@@ -8,6 +8,7 @@ export const SocialPlatform = {
     Linkedin: "linkedin",
     Pinterest: "pinterest",
     Reddit: "reddit",
+    Snapchat: "snapchat",
     Threads: "threads",
     Tiktok: "tiktok",
     Twitter: "twitter",

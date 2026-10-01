@@ -7,6 +7,7 @@ export const SocialAccountDisconnectedReason = {
     RefreshFailed: "REFRESH_FAILED",
     AccountSuspended: "ACCOUNT_SUSPENDED",
     PermissionDenied: "PERMISSION_DENIED",
+    EmailUnconfirmed: "EMAIL_UNCONFIRMED",
 } as const;
 export type SocialAccountDisconnectedReason =
     (typeof SocialAccountDisconnectedReason)[keyof typeof SocialAccountDisconnectedReason];

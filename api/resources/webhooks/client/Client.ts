@@ -10,24 +10,23 @@ import { handleNonStatusCodeError } from "../../../../errors/handleNonStatusCode
 import * as errors from "../../../../errors/index.js";
 import * as Schedulin from "../../../index.js";
 
-export declare namespace PostsClient {
+export declare namespace WebhooksClient {
     export type Options = BaseClientOptions;
 
     export interface RequestOptions extends BaseRequestOptions {}
 }
 
-export class PostsClient {
-    protected readonly _options: NormalizedClientOptionsWithAuth<PostsClient.Options>;
+export class WebhooksClient {
+    protected readonly _options: NormalizedClientOptionsWithAuth<WebhooksClient.Options>;
 
-    constructor(options: PostsClient.Options) {
+    constructor(options: WebhooksClient.Options) {
         this._options = normalizeClientOptionsWithAuth(options);
     }
 
     /**
-     * Search and filter posts with various criteria including status, date range, social accounts, and tags
+     * List the organization's webhook endpoints. Signing secrets are masked.
      *
-     * @param {Schedulin.ListPostsRequest} request
-     * @param {PostsClient.RequestOptions} requestOptions - Request-specific configuration.
+     * @param {WebhooksClient.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link Schedulin.UnauthorizedError}
      * @throws {@link Schedulin.InternalServerError}
@@ -35,32 +34,13 @@ export class PostsClient {
      * @throws {@link errors.SchedulinTimeoutError}
      *
      * @example
-     *     await client.posts.list()
+     *     await client.webhooks.list()
      */
-    public list(
-        request: Schedulin.ListPostsRequest = {},
-        requestOptions?: PostsClient.RequestOptions,
-    ): core.HttpResponsePromise<Schedulin.ListPostsResponse> {
-        return core.HttpResponsePromise.fromPromise(this.__list(request, requestOptions));
+    public list(requestOptions?: WebhooksClient.RequestOptions): core.HttpResponsePromise<unknown> {
+        return core.HttpResponsePromise.fromPromise(this.__list(requestOptions));
     }
 
-    private async __list(
-        request: Schedulin.ListPostsRequest = {},
-        requestOptions?: PostsClient.RequestOptions,
-    ): Promise<core.WithRawResponse<Schedulin.ListPostsResponse>> {
-        const { page, status, statuses, approvalStatus, scheduledAt, tagIds, tagMode, socialAccountIds, limit } =
-            request;
-        const _queryParams: Record<string, unknown> = {
-            page,
-            status: status != null ? status : undefined,
-            statuses: Array.isArray(statuses) ? statuses.map((item) => item) : statuses != null ? statuses : undefined,
-            approvalStatus: approvalStatus != null ? approvalStatus : undefined,
-            scheduledAt,
-            tagIds,
-            tagMode: tagMode != null ? tagMode : undefined,
-            socialAccountIds,
-            limit,
-        };
+    private async __list(requestOptions?: WebhooksClient.RequestOptions): Promise<core.WithRawResponse<unknown>> {
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
         const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             _authRequest.headers,
@@ -72,15 +52,11 @@ export class PostsClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.SchedulinEnvironment.Default,
-                "v0/posts",
+                "v0/webhooks",
             ),
             method: "GET",
             headers: _headers,
-            queryString: core.url
-                .queryBuilder()
-                .addMany(_queryParams)
-                .mergeAdditional(requestOptions?.queryParams)
-                .build(),
+            queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
             timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
             maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
             abortSignal: requestOptions?.abortSignal,
@@ -88,7 +64,7 @@ export class PostsClient {
             logging: this._options.logging,
         });
         if (_response.ok) {
-            return { data: _response.body as Schedulin.ListPostsResponse, rawResponse: _response.rawResponse };
+            return { data: _response.body, rawResponse: _response.rawResponse };
         }
 
         if (_response.error.reason === "status-code") {
@@ -112,14 +88,14 @@ export class PostsClient {
             }
         }
 
-        return handleNonStatusCodeError(_response.error, _response.rawResponse, "GET", "/v0/posts");
+        return handleNonStatusCodeError(_response.error, _response.rawResponse, "GET", "/v0/webhooks");
     }
 
     /**
-     * Create a new post with media, tags, and scheduling options. Media items may reference a stored library URL or any publicly reachable image/video URL — external URLs are downloaded into the media library automatically, so clients that cannot issue a raw presigned PUT can attach media in one call.
+     * Register an HTTPS endpoint for event deliveries. The response includes the signing secret ONCE — store it; later reads return a masked value.
      *
-     * @param {Schedulin.PostCreate} request
-     * @param {PostsClient.RequestOptions} requestOptions - Request-specific configuration.
+     * @param {Schedulin.CreateWebhooksRequest} request
+     * @param {WebhooksClient.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link Schedulin.UnauthorizedError}
      * @throws {@link Schedulin.InternalServerError}
@@ -127,22 +103,22 @@ export class PostsClient {
      * @throws {@link errors.SchedulinTimeoutError}
      *
      * @example
-     *     await client.posts.create({
-     *         caption: "caption",
-     *         socialAccountId: "socialAccountId"
+     *     await client.webhooks.create({
+     *         url: "url",
+     *         events: ["post.published"]
      *     })
      */
     public create(
-        request: Schedulin.PostCreate,
-        requestOptions?: PostsClient.RequestOptions,
-    ): core.HttpResponsePromise<Schedulin.CreatePostsResponse> {
+        request: Schedulin.CreateWebhooksRequest,
+        requestOptions?: WebhooksClient.RequestOptions,
+    ): core.HttpResponsePromise<unknown> {
         return core.HttpResponsePromise.fromPromise(this.__create(request, requestOptions));
     }
 
     private async __create(
-        request: Schedulin.PostCreate,
-        requestOptions?: PostsClient.RequestOptions,
-    ): Promise<core.WithRawResponse<Schedulin.CreatePostsResponse>> {
+        request: Schedulin.CreateWebhooksRequest,
+        requestOptions?: WebhooksClient.RequestOptions,
+    ): Promise<core.WithRawResponse<unknown>> {
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
         const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             _authRequest.headers,
@@ -154,7 +130,7 @@ export class PostsClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.SchedulinEnvironment.Default,
-                "v0/posts",
+                "v0/webhooks",
             ),
             method: "POST",
             headers: _headers,
@@ -169,7 +145,7 @@ export class PostsClient {
             logging: this._options.logging,
         });
         if (_response.ok) {
-            return { data: _response.body as Schedulin.CreatePostsResponse, rawResponse: _response.rawResponse };
+            return { data: _response.body, rawResponse: _response.rawResponse };
         }
 
         if (_response.error.reason === "status-code") {
@@ -193,14 +169,14 @@ export class PostsClient {
             }
         }
 
-        return handleNonStatusCodeError(_response.error, _response.rawResponse, "POST", "/v0/posts");
+        return handleNonStatusCodeError(_response.error, _response.rawResponse, "POST", "/v0/webhooks");
     }
 
     /**
-     * Returns counts of posts for the Queue, Drafts, Approvals, and Sent tabs
+     * Retrieve one webhook endpoint, including failure counters. The signing secret is masked.
      *
-     * @param {Schedulin.CountByTabPostsRequest} request
-     * @param {PostsClient.RequestOptions} requestOptions - Request-specific configuration.
+     * @param {Schedulin.RetrieveWebhooksRequest} request
+     * @param {WebhooksClient.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link Schedulin.UnauthorizedError}
      * @throws {@link Schedulin.InternalServerError}
@@ -208,22 +184,432 @@ export class PostsClient {
      * @throws {@link errors.SchedulinTimeoutError}
      *
      * @example
-     *     await client.posts.countByTab()
+     *     await client.webhooks.retrieve({
+     *         id: "id"
+     *     })
      */
-    public countByTab(
-        request: Schedulin.CountByTabPostsRequest = {},
-        requestOptions?: PostsClient.RequestOptions,
+    public retrieve(
+        request: Schedulin.RetrieveWebhooksRequest,
+        requestOptions?: WebhooksClient.RequestOptions,
     ): core.HttpResponsePromise<unknown> {
-        return core.HttpResponsePromise.fromPromise(this.__countByTab(request, requestOptions));
+        return core.HttpResponsePromise.fromPromise(this.__retrieve(request, requestOptions));
     }
 
-    private async __countByTab(
-        request: Schedulin.CountByTabPostsRequest = {},
-        requestOptions?: PostsClient.RequestOptions,
+    private async __retrieve(
+        request: Schedulin.RetrieveWebhooksRequest,
+        requestOptions?: WebhooksClient.RequestOptions,
     ): Promise<core.WithRawResponse<unknown>> {
-        const { socialAccountIds } = request;
+        const { id } = request;
+        const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
+        const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            _authRequest.headers,
+            this._options?.headers,
+            requestOptions?.headers,
+        );
+        const _response = await core.fetcher({
+            url: core.url.join(
+                (await core.Supplier.get(this._options.baseUrl)) ??
+                    (await core.Supplier.get(this._options.environment)) ??
+                    environments.SchedulinEnvironment.Default,
+                `v0/webhooks/${core.url.encodePathParam(id)}`,
+            ),
+            method: "GET",
+            headers: _headers,
+            queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
+            timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
+            maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
+            abortSignal: requestOptions?.abortSignal,
+            fetchFn: this._options?.fetch,
+            logging: this._options.logging,
+        });
+        if (_response.ok) {
+            return { data: _response.body, rawResponse: _response.rawResponse };
+        }
+
+        if (_response.error.reason === "status-code") {
+            switch (_response.error.statusCode) {
+                case 401:
+                    throw new Schedulin.UnauthorizedError(
+                        _response.error.body as Schedulin.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 500:
+                    throw new Schedulin.InternalServerError(
+                        _response.error.body as Schedulin.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                default:
+                    throw new errors.SchedulinError({
+                        statusCode: _response.error.statusCode,
+                        body: _response.error.body,
+                        rawResponse: _response.rawResponse,
+                    });
+            }
+        }
+
+        return handleNonStatusCodeError(_response.error, _response.rawResponse, "GET", "/v0/webhooks/{id}");
+    }
+
+    /**
+     * Delete a webhook endpoint and its delivery history. Deliveries already in flight are dropped.
+     *
+     * @param {Schedulin.DeleteWebhooksRequest} request
+     * @param {WebhooksClient.RequestOptions} requestOptions - Request-specific configuration.
+     *
+     * @throws {@link Schedulin.UnauthorizedError}
+     * @throws {@link Schedulin.InternalServerError}
+     * @throws {@link errors.SchedulinError}
+     * @throws {@link errors.SchedulinTimeoutError}
+     *
+     * @example
+     *     await client.webhooks.delete({
+     *         id: "id"
+     *     })
+     */
+    public delete(
+        request: Schedulin.DeleteWebhooksRequest,
+        requestOptions?: WebhooksClient.RequestOptions,
+    ): core.HttpResponsePromise<unknown> {
+        return core.HttpResponsePromise.fromPromise(this.__delete(request, requestOptions));
+    }
+
+    private async __delete(
+        request: Schedulin.DeleteWebhooksRequest,
+        requestOptions?: WebhooksClient.RequestOptions,
+    ): Promise<core.WithRawResponse<unknown>> {
+        const { id, ..._body } = request;
+        const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
+        const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            _authRequest.headers,
+            this._options?.headers,
+            requestOptions?.headers,
+        );
+        const _response = await core.fetcher({
+            url: core.url.join(
+                (await core.Supplier.get(this._options.baseUrl)) ??
+                    (await core.Supplier.get(this._options.environment)) ??
+                    environments.SchedulinEnvironment.Default,
+                `v0/webhooks/${core.url.encodePathParam(id)}`,
+            ),
+            method: "DELETE",
+            headers: _headers,
+            contentType: "application/json",
+            queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
+            requestType: "json",
+            body: mergeAdditionalBodyParameters(_body, requestOptions?.additionalBodyParameters),
+            timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
+            maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
+            abortSignal: requestOptions?.abortSignal,
+            fetchFn: this._options?.fetch,
+            logging: this._options.logging,
+        });
+        if (_response.ok) {
+            return { data: _response.body, rawResponse: _response.rawResponse };
+        }
+
+        if (_response.error.reason === "status-code") {
+            switch (_response.error.statusCode) {
+                case 401:
+                    throw new Schedulin.UnauthorizedError(
+                        _response.error.body as Schedulin.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 500:
+                    throw new Schedulin.InternalServerError(
+                        _response.error.body as Schedulin.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                default:
+                    throw new errors.SchedulinError({
+                        statusCode: _response.error.statusCode,
+                        body: _response.error.body,
+                        rawResponse: _response.rawResponse,
+                    });
+            }
+        }
+
+        return handleNonStatusCodeError(_response.error, _response.rawResponse, "DELETE", "/v0/webhooks/{id}");
+    }
+
+    /**
+     * Update URL, subscribed events, description, or enabled state. Re-enabling resets the failure streak.
+     *
+     * @param {Schedulin.UpdateWebhooksRequest} request
+     * @param {WebhooksClient.RequestOptions} requestOptions - Request-specific configuration.
+     *
+     * @throws {@link Schedulin.UnauthorizedError}
+     * @throws {@link Schedulin.InternalServerError}
+     * @throws {@link errors.SchedulinError}
+     * @throws {@link errors.SchedulinTimeoutError}
+     *
+     * @example
+     *     await client.webhooks.update({
+     *         id: "id"
+     *     })
+     */
+    public update(
+        request: Schedulin.UpdateWebhooksRequest,
+        requestOptions?: WebhooksClient.RequestOptions,
+    ): core.HttpResponsePromise<unknown> {
+        return core.HttpResponsePromise.fromPromise(this.__update(request, requestOptions));
+    }
+
+    private async __update(
+        request: Schedulin.UpdateWebhooksRequest,
+        requestOptions?: WebhooksClient.RequestOptions,
+    ): Promise<core.WithRawResponse<unknown>> {
+        const { id, ..._body } = request;
+        const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
+        const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            _authRequest.headers,
+            this._options?.headers,
+            requestOptions?.headers,
+        );
+        const _response = await core.fetcher({
+            url: core.url.join(
+                (await core.Supplier.get(this._options.baseUrl)) ??
+                    (await core.Supplier.get(this._options.environment)) ??
+                    environments.SchedulinEnvironment.Default,
+                `v0/webhooks/${core.url.encodePathParam(id)}`,
+            ),
+            method: "PATCH",
+            headers: _headers,
+            contentType: "application/json",
+            queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
+            requestType: "json",
+            body: mergeAdditionalBodyParameters(_body, requestOptions?.additionalBodyParameters),
+            timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
+            maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
+            abortSignal: requestOptions?.abortSignal,
+            fetchFn: this._options?.fetch,
+            logging: this._options.logging,
+        });
+        if (_response.ok) {
+            return { data: _response.body, rawResponse: _response.rawResponse };
+        }
+
+        if (_response.error.reason === "status-code") {
+            switch (_response.error.statusCode) {
+                case 401:
+                    throw new Schedulin.UnauthorizedError(
+                        _response.error.body as Schedulin.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 500:
+                    throw new Schedulin.InternalServerError(
+                        _response.error.body as Schedulin.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                default:
+                    throw new errors.SchedulinError({
+                        statusCode: _response.error.statusCode,
+                        body: _response.error.body,
+                        rawResponse: _response.rawResponse,
+                    });
+            }
+        }
+
+        return handleNonStatusCodeError(_response.error, _response.rawResponse, "PATCH", "/v0/webhooks/{id}");
+    }
+
+    /**
+     * Generate a new signing secret for the endpoint and return it ONCE. The old secret stops signing immediately.
+     *
+     * @param {Schedulin.RotateSecretWebhooksRequest} request
+     * @param {WebhooksClient.RequestOptions} requestOptions - Request-specific configuration.
+     *
+     * @throws {@link Schedulin.UnauthorizedError}
+     * @throws {@link Schedulin.InternalServerError}
+     * @throws {@link errors.SchedulinError}
+     * @throws {@link errors.SchedulinTimeoutError}
+     *
+     * @example
+     *     await client.webhooks.rotateSecret({
+     *         id: "id"
+     *     })
+     */
+    public rotateSecret(
+        request: Schedulin.RotateSecretWebhooksRequest,
+        requestOptions?: WebhooksClient.RequestOptions,
+    ): core.HttpResponsePromise<unknown> {
+        return core.HttpResponsePromise.fromPromise(this.__rotateSecret(request, requestOptions));
+    }
+
+    private async __rotateSecret(
+        request: Schedulin.RotateSecretWebhooksRequest,
+        requestOptions?: WebhooksClient.RequestOptions,
+    ): Promise<core.WithRawResponse<unknown>> {
+        const { id, ..._body } = request;
+        const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
+        const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            _authRequest.headers,
+            this._options?.headers,
+            requestOptions?.headers,
+        );
+        const _response = await core.fetcher({
+            url: core.url.join(
+                (await core.Supplier.get(this._options.baseUrl)) ??
+                    (await core.Supplier.get(this._options.environment)) ??
+                    environments.SchedulinEnvironment.Default,
+                `v0/webhooks/${core.url.encodePathParam(id)}/rotate-secret`,
+            ),
+            method: "POST",
+            headers: _headers,
+            contentType: "application/json",
+            queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
+            requestType: "json",
+            body: mergeAdditionalBodyParameters(_body, requestOptions?.additionalBodyParameters),
+            timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
+            maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
+            abortSignal: requestOptions?.abortSignal,
+            fetchFn: this._options?.fetch,
+            logging: this._options.logging,
+        });
+        if (_response.ok) {
+            return { data: _response.body, rawResponse: _response.rawResponse };
+        }
+
+        if (_response.error.reason === "status-code") {
+            switch (_response.error.statusCode) {
+                case 401:
+                    throw new Schedulin.UnauthorizedError(
+                        _response.error.body as Schedulin.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 500:
+                    throw new Schedulin.InternalServerError(
+                        _response.error.body as Schedulin.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                default:
+                    throw new errors.SchedulinError({
+                        statusCode: _response.error.statusCode,
+                        body: _response.error.body,
+                        rawResponse: _response.rawResponse,
+                    });
+            }
+        }
+
+        return handleNonStatusCodeError(
+            _response.error,
+            _response.rawResponse,
+            "POST",
+            "/v0/webhooks/{id}/rotate-secret",
+        );
+    }
+
+    /**
+     * Send a signed `ping` event to the endpoint URL and record it in the delivery history.
+     *
+     * @param {Schedulin.TestWebhooksRequest} request
+     * @param {WebhooksClient.RequestOptions} requestOptions - Request-specific configuration.
+     *
+     * @throws {@link Schedulin.UnauthorizedError}
+     * @throws {@link Schedulin.InternalServerError}
+     * @throws {@link errors.SchedulinError}
+     * @throws {@link errors.SchedulinTimeoutError}
+     *
+     * @example
+     *     await client.webhooks.test({
+     *         id: "id"
+     *     })
+     */
+    public test(
+        request: Schedulin.TestWebhooksRequest,
+        requestOptions?: WebhooksClient.RequestOptions,
+    ): core.HttpResponsePromise<unknown> {
+        return core.HttpResponsePromise.fromPromise(this.__test(request, requestOptions));
+    }
+
+    private async __test(
+        request: Schedulin.TestWebhooksRequest,
+        requestOptions?: WebhooksClient.RequestOptions,
+    ): Promise<core.WithRawResponse<unknown>> {
+        const { id, ..._body } = request;
+        const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
+        const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            _authRequest.headers,
+            this._options?.headers,
+            requestOptions?.headers,
+        );
+        const _response = await core.fetcher({
+            url: core.url.join(
+                (await core.Supplier.get(this._options.baseUrl)) ??
+                    (await core.Supplier.get(this._options.environment)) ??
+                    environments.SchedulinEnvironment.Default,
+                `v0/webhooks/${core.url.encodePathParam(id)}/test`,
+            ),
+            method: "POST",
+            headers: _headers,
+            contentType: "application/json",
+            queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
+            requestType: "json",
+            body: mergeAdditionalBodyParameters(_body, requestOptions?.additionalBodyParameters),
+            timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
+            maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
+            abortSignal: requestOptions?.abortSignal,
+            fetchFn: this._options?.fetch,
+            logging: this._options.logging,
+        });
+        if (_response.ok) {
+            return { data: _response.body, rawResponse: _response.rawResponse };
+        }
+
+        if (_response.error.reason === "status-code") {
+            switch (_response.error.statusCode) {
+                case 401:
+                    throw new Schedulin.UnauthorizedError(
+                        _response.error.body as Schedulin.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 500:
+                    throw new Schedulin.InternalServerError(
+                        _response.error.body as Schedulin.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                default:
+                    throw new errors.SchedulinError({
+                        statusCode: _response.error.statusCode,
+                        body: _response.error.body,
+                        rawResponse: _response.rawResponse,
+                    });
+            }
+        }
+
+        return handleNonStatusCodeError(_response.error, _response.rawResponse, "POST", "/v0/webhooks/{id}/test");
+    }
+
+    /**
+     * Delivery history for a webhook endpoint: event, status, attempts, last response code, and payload.
+     *
+     * @param {Schedulin.ListDeliveriesWebhooksRequest} request
+     * @param {WebhooksClient.RequestOptions} requestOptions - Request-specific configuration.
+     *
+     * @throws {@link Schedulin.UnauthorizedError}
+     * @throws {@link Schedulin.InternalServerError}
+     * @throws {@link errors.SchedulinError}
+     * @throws {@link errors.SchedulinTimeoutError}
+     *
+     * @example
+     *     await client.webhooks.listDeliveries({
+     *         id: "id"
+     *     })
+     */
+    public listDeliveries(
+        request: Schedulin.ListDeliveriesWebhooksRequest,
+        requestOptions?: WebhooksClient.RequestOptions,
+    ): core.HttpResponsePromise<unknown> {
+        return core.HttpResponsePromise.fromPromise(this.__listDeliveries(request, requestOptions));
+    }
+
+    private async __listDeliveries(
+        request: Schedulin.ListDeliveriesWebhooksRequest,
+        requestOptions?: WebhooksClient.RequestOptions,
+    ): Promise<core.WithRawResponse<unknown>> {
+        const { id, limit, page } = request;
         const _queryParams: Record<string, unknown> = {
-            socialAccountIds,
+            limit,
+            page,
         };
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
         const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
@@ -236,7 +622,7 @@ export class PostsClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.SchedulinEnvironment.Default,
-                "v0/posts/counts/by-tab",
+                `v0/webhooks/${core.url.encodePathParam(id)}/deliveries`,
             ),
             method: "GET",
             headers: _headers,
@@ -276,588 +662,6 @@ export class PostsClient {
             }
         }
 
-        return handleNonStatusCodeError(_response.error, _response.rawResponse, "GET", "/v0/posts/counts/by-tab");
-    }
-
-    /**
-     * Retrieve a single post by its ID with all relations
-     *
-     * @param {Schedulin.RetrievePostsRequest} request
-     * @param {PostsClient.RequestOptions} requestOptions - Request-specific configuration.
-     *
-     * @throws {@link Schedulin.UnauthorizedError}
-     * @throws {@link Schedulin.InternalServerError}
-     * @throws {@link errors.SchedulinError}
-     * @throws {@link errors.SchedulinTimeoutError}
-     *
-     * @example
-     *     await client.posts.retrieve({
-     *         id: "id"
-     *     })
-     */
-    public retrieve(
-        request: Schedulin.RetrievePostsRequest,
-        requestOptions?: PostsClient.RequestOptions,
-    ): core.HttpResponsePromise<Schedulin.PostWithRelations> {
-        return core.HttpResponsePromise.fromPromise(this.__retrieve(request, requestOptions));
-    }
-
-    private async __retrieve(
-        request: Schedulin.RetrievePostsRequest,
-        requestOptions?: PostsClient.RequestOptions,
-    ): Promise<core.WithRawResponse<Schedulin.PostWithRelations>> {
-        const { id } = request;
-        const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
-        const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
-            _authRequest.headers,
-            this._options?.headers,
-            requestOptions?.headers,
-        );
-        const _response = await core.fetcher({
-            url: core.url.join(
-                (await core.Supplier.get(this._options.baseUrl)) ??
-                    (await core.Supplier.get(this._options.environment)) ??
-                    environments.SchedulinEnvironment.Default,
-                `v0/posts/${core.url.encodePathParam(id)}`,
-            ),
-            method: "GET",
-            headers: _headers,
-            queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
-            timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
-            maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
-            abortSignal: requestOptions?.abortSignal,
-            fetchFn: this._options?.fetch,
-            logging: this._options.logging,
-        });
-        if (_response.ok) {
-            return { data: _response.body as Schedulin.PostWithRelations, rawResponse: _response.rawResponse };
-        }
-
-        if (_response.error.reason === "status-code") {
-            switch (_response.error.statusCode) {
-                case 401:
-                    throw new Schedulin.UnauthorizedError(
-                        _response.error.body as Schedulin.ErrorResponse,
-                        _response.rawResponse,
-                    );
-                case 500:
-                    throw new Schedulin.InternalServerError(
-                        _response.error.body as Schedulin.ErrorResponse,
-                        _response.rawResponse,
-                    );
-                default:
-                    throw new errors.SchedulinError({
-                        statusCode: _response.error.statusCode,
-                        body: _response.error.body,
-                        rawResponse: _response.rawResponse,
-                    });
-            }
-        }
-
-        return handleNonStatusCodeError(_response.error, _response.rawResponse, "GET", "/v0/posts/{id}");
-    }
-
-    /**
-     * Update an existing post by its ID
-     *
-     * @param {Schedulin.UpdatePostsRequest} request
-     * @param {PostsClient.RequestOptions} requestOptions - Request-specific configuration.
-     *
-     * @throws {@link Schedulin.UnauthorizedError}
-     * @throws {@link Schedulin.InternalServerError}
-     * @throws {@link errors.SchedulinError}
-     * @throws {@link errors.SchedulinTimeoutError}
-     *
-     * @example
-     *     await client.posts.update({
-     *         id: "id"
-     *     })
-     */
-    public update(
-        request: Schedulin.UpdatePostsRequest,
-        requestOptions?: PostsClient.RequestOptions,
-    ): core.HttpResponsePromise<Schedulin.Post> {
-        return core.HttpResponsePromise.fromPromise(this.__update(request, requestOptions));
-    }
-
-    private async __update(
-        request: Schedulin.UpdatePostsRequest,
-        requestOptions?: PostsClient.RequestOptions,
-    ): Promise<core.WithRawResponse<Schedulin.Post>> {
-        const { id, ..._body } = request;
-        const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
-        const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
-            _authRequest.headers,
-            this._options?.headers,
-            requestOptions?.headers,
-        );
-        const _response = await core.fetcher({
-            url: core.url.join(
-                (await core.Supplier.get(this._options.baseUrl)) ??
-                    (await core.Supplier.get(this._options.environment)) ??
-                    environments.SchedulinEnvironment.Default,
-                `v0/posts/${core.url.encodePathParam(id)}`,
-            ),
-            method: "PUT",
-            headers: _headers,
-            contentType: "application/json",
-            queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
-            requestType: "json",
-            body: mergeAdditionalBodyParameters(_body, requestOptions?.additionalBodyParameters),
-            timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
-            maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
-            abortSignal: requestOptions?.abortSignal,
-            fetchFn: this._options?.fetch,
-            logging: this._options.logging,
-        });
-        if (_response.ok) {
-            return { data: _response.body as Schedulin.Post, rawResponse: _response.rawResponse };
-        }
-
-        if (_response.error.reason === "status-code") {
-            switch (_response.error.statusCode) {
-                case 401:
-                    throw new Schedulin.UnauthorizedError(
-                        _response.error.body as Schedulin.ErrorResponse,
-                        _response.rawResponse,
-                    );
-                case 500:
-                    throw new Schedulin.InternalServerError(
-                        _response.error.body as Schedulin.ErrorResponse,
-                        _response.rawResponse,
-                    );
-                default:
-                    throw new errors.SchedulinError({
-                        statusCode: _response.error.statusCode,
-                        body: _response.error.body,
-                        rawResponse: _response.rawResponse,
-                    });
-            }
-        }
-
-        return handleNonStatusCodeError(_response.error, _response.rawResponse, "PUT", "/v0/posts/{id}");
-    }
-
-    /**
-     * Delete a post by its ID
-     *
-     * @param {Schedulin.DeletePostsRequest} request
-     * @param {PostsClient.RequestOptions} requestOptions - Request-specific configuration.
-     *
-     * @throws {@link Schedulin.UnauthorizedError}
-     * @throws {@link Schedulin.InternalServerError}
-     * @throws {@link errors.SchedulinError}
-     * @throws {@link errors.SchedulinTimeoutError}
-     *
-     * @example
-     *     await client.posts.delete({
-     *         id: "id"
-     *     })
-     */
-    public delete(
-        request: Schedulin.DeletePostsRequest,
-        requestOptions?: PostsClient.RequestOptions,
-    ): core.HttpResponsePromise<Schedulin.Post> {
-        return core.HttpResponsePromise.fromPromise(this.__delete(request, requestOptions));
-    }
-
-    private async __delete(
-        request: Schedulin.DeletePostsRequest,
-        requestOptions?: PostsClient.RequestOptions,
-    ): Promise<core.WithRawResponse<Schedulin.Post>> {
-        const { id, ..._body } = request;
-        const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
-        const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
-            _authRequest.headers,
-            this._options?.headers,
-            requestOptions?.headers,
-        );
-        const _response = await core.fetcher({
-            url: core.url.join(
-                (await core.Supplier.get(this._options.baseUrl)) ??
-                    (await core.Supplier.get(this._options.environment)) ??
-                    environments.SchedulinEnvironment.Default,
-                `v0/posts/${core.url.encodePathParam(id)}`,
-            ),
-            method: "DELETE",
-            headers: _headers,
-            contentType: "application/json",
-            queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
-            requestType: "json",
-            body: mergeAdditionalBodyParameters(_body, requestOptions?.additionalBodyParameters),
-            timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
-            maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
-            abortSignal: requestOptions?.abortSignal,
-            fetchFn: this._options?.fetch,
-            logging: this._options.logging,
-        });
-        if (_response.ok) {
-            return { data: _response.body as Schedulin.Post, rawResponse: _response.rawResponse };
-        }
-
-        if (_response.error.reason === "status-code") {
-            switch (_response.error.statusCode) {
-                case 401:
-                    throw new Schedulin.UnauthorizedError(
-                        _response.error.body as Schedulin.ErrorResponse,
-                        _response.rawResponse,
-                    );
-                case 500:
-                    throw new Schedulin.InternalServerError(
-                        _response.error.body as Schedulin.ErrorResponse,
-                        _response.rawResponse,
-                    );
-                default:
-                    throw new errors.SchedulinError({
-                        statusCode: _response.error.statusCode,
-                        body: _response.error.body,
-                        rawResponse: _response.rawResponse,
-                    });
-            }
-        }
-
-        return handleNonStatusCodeError(_response.error, _response.rawResponse, "DELETE", "/v0/posts/{id}");
-    }
-
-    /**
-     * Retrieve the latest analytics snapshot for a post
-     *
-     * @param {Schedulin.AnalyticsSummaryPostsRequest} request
-     * @param {PostsClient.RequestOptions} requestOptions - Request-specific configuration.
-     *
-     * @throws {@link Schedulin.UnauthorizedError}
-     * @throws {@link Schedulin.InternalServerError}
-     * @throws {@link errors.SchedulinError}
-     * @throws {@link errors.SchedulinTimeoutError}
-     *
-     * @example
-     *     await client.posts.analyticsSummary({
-     *         id: "id"
-     *     })
-     */
-    public analyticsSummary(
-        request: Schedulin.AnalyticsSummaryPostsRequest,
-        requestOptions?: PostsClient.RequestOptions,
-    ): core.HttpResponsePromise<Schedulin.AnalyticsSummaryPostsResponse> {
-        return core.HttpResponsePromise.fromPromise(this.__analyticsSummary(request, requestOptions));
-    }
-
-    private async __analyticsSummary(
-        request: Schedulin.AnalyticsSummaryPostsRequest,
-        requestOptions?: PostsClient.RequestOptions,
-    ): Promise<core.WithRawResponse<Schedulin.AnalyticsSummaryPostsResponse>> {
-        const { id } = request;
-        const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
-        const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
-            _authRequest.headers,
-            this._options?.headers,
-            requestOptions?.headers,
-        );
-        const _response = await core.fetcher({
-            url: core.url.join(
-                (await core.Supplier.get(this._options.baseUrl)) ??
-                    (await core.Supplier.get(this._options.environment)) ??
-                    environments.SchedulinEnvironment.Default,
-                `v0/posts/${core.url.encodePathParam(id)}/analytics/summary`,
-            ),
-            method: "GET",
-            headers: _headers,
-            queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
-            timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
-            maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
-            abortSignal: requestOptions?.abortSignal,
-            fetchFn: this._options?.fetch,
-            logging: this._options.logging,
-        });
-        if (_response.ok) {
-            return {
-                data: _response.body as Schedulin.AnalyticsSummaryPostsResponse,
-                rawResponse: _response.rawResponse,
-            };
-        }
-
-        if (_response.error.reason === "status-code") {
-            switch (_response.error.statusCode) {
-                case 401:
-                    throw new Schedulin.UnauthorizedError(
-                        _response.error.body as Schedulin.ErrorResponse,
-                        _response.rawResponse,
-                    );
-                case 500:
-                    throw new Schedulin.InternalServerError(
-                        _response.error.body as Schedulin.ErrorResponse,
-                        _response.rawResponse,
-                    );
-                default:
-                    throw new errors.SchedulinError({
-                        statusCode: _response.error.statusCode,
-                        body: _response.error.body,
-                        rawResponse: _response.rawResponse,
-                    });
-            }
-        }
-
-        return handleNonStatusCodeError(
-            _response.error,
-            _response.rawResponse,
-            "GET",
-            "/v0/posts/{id}/analytics/summary",
-        );
-    }
-
-    /**
-     * Retrieve time series analytics metrics for a post
-     *
-     * @param {Schedulin.AnalyticsSeriesPostsRequest} request
-     * @param {PostsClient.RequestOptions} requestOptions - Request-specific configuration.
-     *
-     * @throws {@link Schedulin.UnauthorizedError}
-     * @throws {@link Schedulin.InternalServerError}
-     * @throws {@link errors.SchedulinError}
-     * @throws {@link errors.SchedulinTimeoutError}
-     *
-     * @example
-     *     await client.posts.analyticsSeries({
-     *         id: "id"
-     *     })
-     */
-    public analyticsSeries(
-        request: Schedulin.AnalyticsSeriesPostsRequest,
-        requestOptions?: PostsClient.RequestOptions,
-    ): core.HttpResponsePromise<Schedulin.AnalyticsSeriesPostsResponse> {
-        return core.HttpResponsePromise.fromPromise(this.__analyticsSeries(request, requestOptions));
-    }
-
-    private async __analyticsSeries(
-        request: Schedulin.AnalyticsSeriesPostsRequest,
-        requestOptions?: PostsClient.RequestOptions,
-    ): Promise<core.WithRawResponse<Schedulin.AnalyticsSeriesPostsResponse>> {
-        const { id, limit } = request;
-        const _queryParams: Record<string, unknown> = {
-            limit,
-        };
-        const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
-        const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
-            _authRequest.headers,
-            this._options?.headers,
-            requestOptions?.headers,
-        );
-        const _response = await core.fetcher({
-            url: core.url.join(
-                (await core.Supplier.get(this._options.baseUrl)) ??
-                    (await core.Supplier.get(this._options.environment)) ??
-                    environments.SchedulinEnvironment.Default,
-                `v0/posts/${core.url.encodePathParam(id)}/analytics/series`,
-            ),
-            method: "GET",
-            headers: _headers,
-            queryString: core.url
-                .queryBuilder()
-                .addMany(_queryParams)
-                .mergeAdditional(requestOptions?.queryParams)
-                .build(),
-            timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
-            maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
-            abortSignal: requestOptions?.abortSignal,
-            fetchFn: this._options?.fetch,
-            logging: this._options.logging,
-        });
-        if (_response.ok) {
-            return {
-                data: _response.body as Schedulin.AnalyticsSeriesPostsResponse,
-                rawResponse: _response.rawResponse,
-            };
-        }
-
-        if (_response.error.reason === "status-code") {
-            switch (_response.error.statusCode) {
-                case 401:
-                    throw new Schedulin.UnauthorizedError(
-                        _response.error.body as Schedulin.ErrorResponse,
-                        _response.rawResponse,
-                    );
-                case 500:
-                    throw new Schedulin.InternalServerError(
-                        _response.error.body as Schedulin.ErrorResponse,
-                        _response.rawResponse,
-                    );
-                default:
-                    throw new errors.SchedulinError({
-                        statusCode: _response.error.statusCode,
-                        body: _response.error.body,
-                        rawResponse: _response.rawResponse,
-                    });
-            }
-        }
-
-        return handleNonStatusCodeError(
-            _response.error,
-            _response.rawResponse,
-            "GET",
-            "/v0/posts/{id}/analytics/series",
-        );
-    }
-
-    /**
-     * Publish a draft post to connected social media accounts
-     *
-     * @param {Schedulin.PublishDraftPostsRequest} request
-     * @param {PostsClient.RequestOptions} requestOptions - Request-specific configuration.
-     *
-     * @throws {@link Schedulin.UnauthorizedError}
-     * @throws {@link Schedulin.InternalServerError}
-     * @throws {@link errors.SchedulinError}
-     * @throws {@link errors.SchedulinTimeoutError}
-     *
-     * @example
-     *     await client.posts.publishDraft({
-     *         id: "id"
-     *     })
-     */
-    public publishDraft(
-        request: Schedulin.PublishDraftPostsRequest,
-        requestOptions?: PostsClient.RequestOptions,
-    ): core.HttpResponsePromise<Schedulin.Post> {
-        return core.HttpResponsePromise.fromPromise(this.__publishDraft(request, requestOptions));
-    }
-
-    private async __publishDraft(
-        request: Schedulin.PublishDraftPostsRequest,
-        requestOptions?: PostsClient.RequestOptions,
-    ): Promise<core.WithRawResponse<Schedulin.Post>> {
-        const { id, ..._body } = request;
-        const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
-        const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
-            _authRequest.headers,
-            this._options?.headers,
-            requestOptions?.headers,
-        );
-        const _response = await core.fetcher({
-            url: core.url.join(
-                (await core.Supplier.get(this._options.baseUrl)) ??
-                    (await core.Supplier.get(this._options.environment)) ??
-                    environments.SchedulinEnvironment.Default,
-                `v0/posts/${core.url.encodePathParam(id)}/publish`,
-            ),
-            method: "POST",
-            headers: _headers,
-            contentType: "application/json",
-            queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
-            requestType: "json",
-            body: mergeAdditionalBodyParameters(_body, requestOptions?.additionalBodyParameters),
-            timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
-            maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
-            abortSignal: requestOptions?.abortSignal,
-            fetchFn: this._options?.fetch,
-            logging: this._options.logging,
-        });
-        if (_response.ok) {
-            return { data: _response.body as Schedulin.Post, rawResponse: _response.rawResponse };
-        }
-
-        if (_response.error.reason === "status-code") {
-            switch (_response.error.statusCode) {
-                case 401:
-                    throw new Schedulin.UnauthorizedError(
-                        _response.error.body as Schedulin.ErrorResponse,
-                        _response.rawResponse,
-                    );
-                case 500:
-                    throw new Schedulin.InternalServerError(
-                        _response.error.body as Schedulin.ErrorResponse,
-                        _response.rawResponse,
-                    );
-                default:
-                    throw new errors.SchedulinError({
-                        statusCode: _response.error.statusCode,
-                        body: _response.error.body,
-                        rawResponse: _response.rawResponse,
-                    });
-            }
-        }
-
-        return handleNonStatusCodeError(_response.error, _response.rawResponse, "POST", "/v0/posts/{id}/publish");
-    }
-
-    /**
-     * Replace all tags on a post. No status restrictions apply.
-     *
-     * @param {Schedulin.UpdateTagsPostsRequest} request
-     * @param {PostsClient.RequestOptions} requestOptions - Request-specific configuration.
-     *
-     * @throws {@link Schedulin.UnauthorizedError}
-     * @throws {@link Schedulin.InternalServerError}
-     * @throws {@link errors.SchedulinError}
-     * @throws {@link errors.SchedulinTimeoutError}
-     *
-     * @example
-     *     await client.posts.updateTags({
-     *         id: "id",
-     *         tagIds: ["tagIds"]
-     *     })
-     */
-    public updateTags(
-        request: Schedulin.UpdateTagsPostsRequest,
-        requestOptions?: PostsClient.RequestOptions,
-    ): core.HttpResponsePromise<Schedulin.Post> {
-        return core.HttpResponsePromise.fromPromise(this.__updateTags(request, requestOptions));
-    }
-
-    private async __updateTags(
-        request: Schedulin.UpdateTagsPostsRequest,
-        requestOptions?: PostsClient.RequestOptions,
-    ): Promise<core.WithRawResponse<Schedulin.Post>> {
-        const { id, ..._body } = request;
-        const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
-        const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
-            _authRequest.headers,
-            this._options?.headers,
-            requestOptions?.headers,
-        );
-        const _response = await core.fetcher({
-            url: core.url.join(
-                (await core.Supplier.get(this._options.baseUrl)) ??
-                    (await core.Supplier.get(this._options.environment)) ??
-                    environments.SchedulinEnvironment.Default,
-                `v0/posts/${core.url.encodePathParam(id)}/tags`,
-            ),
-            method: "PUT",
-            headers: _headers,
-            contentType: "application/json",
-            queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
-            requestType: "json",
-            body: mergeAdditionalBodyParameters(_body, requestOptions?.additionalBodyParameters),
-            timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
-            maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
-            abortSignal: requestOptions?.abortSignal,
-            fetchFn: this._options?.fetch,
-            logging: this._options.logging,
-        });
-        if (_response.ok) {
-            return { data: _response.body as Schedulin.Post, rawResponse: _response.rawResponse };
-        }
-
-        if (_response.error.reason === "status-code") {
-            switch (_response.error.statusCode) {
-                case 401:
-                    throw new Schedulin.UnauthorizedError(
-                        _response.error.body as Schedulin.ErrorResponse,
-                        _response.rawResponse,
-                    );
-                case 500:
-                    throw new Schedulin.InternalServerError(
-                        _response.error.body as Schedulin.ErrorResponse,
-                        _response.rawResponse,
-                    );
-                default:
-                    throw new errors.SchedulinError({
-                        statusCode: _response.error.statusCode,
-                        body: _response.error.body,
-                        rawResponse: _response.rawResponse,
-                    });
-            }
-        }
-
-        return handleNonStatusCodeError(_response.error, _response.rawResponse, "PUT", "/v0/posts/{id}/tags");
+        return handleNonStatusCodeError(_response.error, _response.rawResponse, "GET", "/v0/webhooks/{id}/deliveries");
     }
 }

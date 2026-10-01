@@ -9,6 +9,7 @@
  */
 export interface PostCreate {
     caption: string;
+    title?: string;
     scheduledAt?: string | null;
     socialAccountId: string;
     media?: PostCreate.Media.Item[];
@@ -64,6 +65,7 @@ export namespace PostCreate {
                         Linkedin: "linkedin",
                         Pinterest: "pinterest",
                         Reddit: "reddit",
+                        Snapchat: "snapchat",
                         Threads: "threads",
                         Tiktok: "tiktok",
                         Twitter: "twitter",
@@ -136,6 +138,7 @@ export namespace PostCreate {
                     Linkedin: "linkedin",
                     Pinterest: "pinterest",
                     Reddit: "reddit",
+                    Snapchat: "snapchat",
                     Threads: "threads",
                     Tiktok: "tiktok",
                     Twitter: "twitter",
@@ -226,6 +229,7 @@ export namespace PostCreate {
                                 Linkedin: "linkedin",
                                 Pinterest: "pinterest",
                                 Reddit: "reddit",
+                                Snapchat: "snapchat",
                                 Threads: "threads",
                                 Tiktok: "tiktok",
                                 Twitter: "twitter",

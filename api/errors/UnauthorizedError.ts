@@ -5,6 +5,8 @@ import * as errors from "../../errors/index.js";
 import type * as Schedulin from "../index.js";
 
 export class UnauthorizedError extends errors.SchedulinError {
+    public declare readonly body: Schedulin.ErrorResponse;
+
     constructor(body: Schedulin.ErrorResponse, rawResponse?: core.RawResponse) {
         super({
             message: "UnauthorizedError",

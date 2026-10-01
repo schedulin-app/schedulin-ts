@@ -30,6 +30,8 @@ export class SocialAccountsClient {
      *
      * @throws {@link Schedulin.UnauthorizedError}
      * @throws {@link Schedulin.InternalServerError}
+     * @throws {@link errors.SchedulinError}
+     * @throws {@link errors.SchedulinTimeoutError}
      *
      * @example
      *     await client.socialAccounts.list()
@@ -94,6 +96,186 @@ export class SocialAccountsClient {
     }
 
     /**
+     * List companies available to a connected Whop account. Select one before requesting its forum experiences.
+     *
+     * @param {Schedulin.ListWhopCompaniesSocialAccountsRequest} request
+     * @param {SocialAccountsClient.RequestOptions} requestOptions - Request-specific configuration.
+     *
+     * @throws {@link Schedulin.UnauthorizedError}
+     * @throws {@link Schedulin.InternalServerError}
+     * @throws {@link errors.SchedulinError}
+     * @throws {@link errors.SchedulinTimeoutError}
+     *
+     * @example
+     *     await client.socialAccounts.listWhopCompanies({
+     *         id: "id"
+     *     })
+     */
+    public listWhopCompanies(
+        request: Schedulin.ListWhopCompaniesSocialAccountsRequest,
+        requestOptions?: SocialAccountsClient.RequestOptions,
+    ): core.HttpResponsePromise<Schedulin.ListWhopCompaniesSocialAccountsResponse> {
+        return core.HttpResponsePromise.fromPromise(this.__listWhopCompanies(request, requestOptions));
+    }
+
+    private async __listWhopCompanies(
+        request: Schedulin.ListWhopCompaniesSocialAccountsRequest,
+        requestOptions?: SocialAccountsClient.RequestOptions,
+    ): Promise<core.WithRawResponse<Schedulin.ListWhopCompaniesSocialAccountsResponse>> {
+        const { id } = request;
+        const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
+        const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            _authRequest.headers,
+            this._options?.headers,
+            requestOptions?.headers,
+        );
+        const _response = await core.fetcher({
+            url: core.url.join(
+                (await core.Supplier.get(this._options.baseUrl)) ??
+                    (await core.Supplier.get(this._options.environment)) ??
+                    environments.SchedulinEnvironment.Default,
+                `v0/social-accounts/${core.url.encodePathParam(id)}/whop-companies`,
+            ),
+            method: "GET",
+            headers: _headers,
+            queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
+            timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
+            maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
+            abortSignal: requestOptions?.abortSignal,
+            fetchFn: this._options?.fetch,
+            logging: this._options.logging,
+        });
+        if (_response.ok) {
+            return {
+                data: _response.body as Schedulin.ListWhopCompaniesSocialAccountsResponse,
+                rawResponse: _response.rawResponse,
+            };
+        }
+
+        if (_response.error.reason === "status-code") {
+            switch (_response.error.statusCode) {
+                case 401:
+                    throw new Schedulin.UnauthorizedError(
+                        _response.error.body as Schedulin.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 500:
+                    throw new Schedulin.InternalServerError(
+                        _response.error.body as Schedulin.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                default:
+                    throw new errors.SchedulinError({
+                        statusCode: _response.error.statusCode,
+                        body: _response.error.body,
+                        rawResponse: _response.rawResponse,
+                    });
+            }
+        }
+
+        return handleNonStatusCodeError(
+            _response.error,
+            _response.rawResponse,
+            "GET",
+            "/v0/social-accounts/{id}/whop-companies",
+        );
+    }
+
+    /**
+     * List forum experiences for a Whop company. Use an item id as platformConfiguration.experience.
+     *
+     * @param {Schedulin.ListWhopForumsSocialAccountsRequest} request
+     * @param {SocialAccountsClient.RequestOptions} requestOptions - Request-specific configuration.
+     *
+     * @throws {@link Schedulin.UnauthorizedError}
+     * @throws {@link Schedulin.InternalServerError}
+     * @throws {@link errors.SchedulinError}
+     * @throws {@link errors.SchedulinTimeoutError}
+     *
+     * @example
+     *     await client.socialAccounts.listWhopForums({
+     *         id: "id",
+     *         companyId: "companyId"
+     *     })
+     */
+    public listWhopForums(
+        request: Schedulin.ListWhopForumsSocialAccountsRequest,
+        requestOptions?: SocialAccountsClient.RequestOptions,
+    ): core.HttpResponsePromise<Schedulin.ListWhopForumsSocialAccountsResponse> {
+        return core.HttpResponsePromise.fromPromise(this.__listWhopForums(request, requestOptions));
+    }
+
+    private async __listWhopForums(
+        request: Schedulin.ListWhopForumsSocialAccountsRequest,
+        requestOptions?: SocialAccountsClient.RequestOptions,
+    ): Promise<core.WithRawResponse<Schedulin.ListWhopForumsSocialAccountsResponse>> {
+        const { id, companyId } = request;
+        const _queryParams: Record<string, unknown> = {
+            companyId,
+        };
+        const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
+        const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            _authRequest.headers,
+            this._options?.headers,
+            requestOptions?.headers,
+        );
+        const _response = await core.fetcher({
+            url: core.url.join(
+                (await core.Supplier.get(this._options.baseUrl)) ??
+                    (await core.Supplier.get(this._options.environment)) ??
+                    environments.SchedulinEnvironment.Default,
+                `v0/social-accounts/${core.url.encodePathParam(id)}/whop-forums`,
+            ),
+            method: "GET",
+            headers: _headers,
+            queryString: core.url
+                .queryBuilder()
+                .addMany(_queryParams)
+                .mergeAdditional(requestOptions?.queryParams)
+                .build(),
+            timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
+            maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
+            abortSignal: requestOptions?.abortSignal,
+            fetchFn: this._options?.fetch,
+            logging: this._options.logging,
+        });
+        if (_response.ok) {
+            return {
+                data: _response.body as Schedulin.ListWhopForumsSocialAccountsResponse,
+                rawResponse: _response.rawResponse,
+            };
+        }
+
+        if (_response.error.reason === "status-code") {
+            switch (_response.error.statusCode) {
+                case 401:
+                    throw new Schedulin.UnauthorizedError(
+                        _response.error.body as Schedulin.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 500:
+                    throw new Schedulin.InternalServerError(
+                        _response.error.body as Schedulin.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                default:
+                    throw new errors.SchedulinError({
+                        statusCode: _response.error.statusCode,
+                        body: _response.error.body,
+                        rawResponse: _response.rawResponse,
+                    });
+            }
+        }
+
+        return handleNonStatusCodeError(
+            _response.error,
+            _response.rawResponse,
+            "GET",
+            "/v0/social-accounts/{id}/whop-forums",
+        );
+    }
+
+    /**
      * Update social media account settings and information
      *
      * @param {Schedulin.UpdateSocialAccountsRequest} request
@@ -101,6 +283,8 @@ export class SocialAccountsClient {
      *
      * @throws {@link Schedulin.UnauthorizedError}
      * @throws {@link Schedulin.InternalServerError}
+     * @throws {@link errors.SchedulinError}
+     * @throws {@link errors.SchedulinTimeoutError}
      *
      * @example
      *     await client.socialAccounts.update({
@@ -183,6 +367,8 @@ export class SocialAccountsClient {
      *
      * @throws {@link Schedulin.UnauthorizedError}
      * @throws {@link Schedulin.InternalServerError}
+     * @throws {@link errors.SchedulinError}
+     * @throws {@link errors.SchedulinTimeoutError}
      *
      * @example
      *     await client.socialAccounts.delete({
@@ -265,6 +451,8 @@ export class SocialAccountsClient {
      *
      * @throws {@link Schedulin.UnauthorizedError}
      * @throws {@link Schedulin.InternalServerError}
+     * @throws {@link errors.SchedulinError}
+     * @throws {@link errors.SchedulinTimeoutError}
      *
      * @example
      *     await client.socialAccounts.updateTimezone({
@@ -353,6 +541,8 @@ export class SocialAccountsClient {
      *
      * @throws {@link Schedulin.UnauthorizedError}
      * @throws {@link Schedulin.InternalServerError}
+     * @throws {@link errors.SchedulinError}
+     * @throws {@link errors.SchedulinTimeoutError}
      *
      * @example
      *     await client.socialAccounts.nextSlots({
@@ -445,6 +635,8 @@ export class SocialAccountsClient {
      *
      * @throws {@link Schedulin.UnauthorizedError}
      * @throws {@link Schedulin.InternalServerError}
+     * @throws {@link errors.SchedulinError}
+     * @throws {@link errors.SchedulinTimeoutError}
      *
      * @example
      *     await client.socialAccounts.pinterestBoards({
@@ -529,6 +721,8 @@ export class SocialAccountsClient {
      *
      * @throws {@link Schedulin.UnauthorizedError}
      * @throws {@link Schedulin.InternalServerError}
+     * @throws {@link errors.SchedulinError}
+     * @throws {@link errors.SchedulinTimeoutError}
      *
      * @example
      *     await client.socialAccounts.tiktokCreatorInfo({

@@ -23,6 +23,7 @@ export namespace ListPlatformsResponse {
                 min?: number | undefined;
                 max: number;
                 allowedTypes?: MediaRules.AllowedTypes.Item[] | undefined;
+                allowedDimensions?: MediaRules.AllowedDimensions.Item[] | undefined;
             }
 
             export namespace MediaRules {
@@ -35,6 +36,15 @@ export namespace ListPlatformsResponse {
                         Gif: "GIF",
                     } as const;
                     export type Item = (typeof Item)[keyof typeof Item];
+                }
+
+                export type AllowedDimensions = AllowedDimensions.Item[];
+
+                export namespace AllowedDimensions {
+                    export interface Item {
+                        width: number;
+                        height: number;
+                    }
                 }
             }
 

@@ -6,6 +6,6 @@
  *         id: "id"
  *     }
  */
-export interface GetJobStatusPostsRequest {
+export interface V0MediaDeleteRequest {
     id: string;
 }

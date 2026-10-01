@@ -1,5 +1,7 @@
 export * from "./DeleteSocialAccountsResponse.js";
 export * from "./ListSocialAccountsResponse.js";
+export * from "./ListWhopCompaniesSocialAccountsResponse.js";
+export * from "./ListWhopForumsSocialAccountsResponse.js";
 export * from "./NextSlotsSocialAccountsResponse.js";
 export * from "./PinterestBoardsSocialAccountsResponse.js";
 export * from "./TiktokCreatorInfoSocialAccountsResponse.js";

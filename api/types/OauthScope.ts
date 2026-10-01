@@ -34,5 +34,17 @@ export const OauthScope = {
     /**
      * View organization details */
     OrgRead: "org:read",
+    /**
+     * View AI generation jobs and available voices */
+    AiRead: "ai:read",
+    /**
+     * Generate AI images and videos (spends AI credits) */
+    AiWrite: "ai:write",
+    /**
+     * View webhook endpoints and delivery history */
+    WebhooksRead: "webhooks:read",
+    /**
+     * Create, edit, and delete webhook endpoints */
+    WebhooksWrite: "webhooks:write",
 } as const;
 export type OauthScope = (typeof OauthScope)[keyof typeof OauthScope];

@@ -29,6 +29,8 @@ export class PlatformsClient {
      *
      * @throws {@link Schedulin.UnauthorizedError}
      * @throws {@link Schedulin.InternalServerError}
+     * @throws {@link errors.SchedulinError}
+     * @throws {@link errors.SchedulinTimeoutError}
      *
      * @example
      *     await client.platforms.list()

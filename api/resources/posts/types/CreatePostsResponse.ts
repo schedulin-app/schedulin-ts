@@ -54,6 +54,7 @@ export namespace CreatePostsResponse {
                         Linkedin: "linkedin",
                         Pinterest: "pinterest",
                         Reddit: "reddit",
+                        Snapchat: "snapchat",
                         Threads: "threads",
                         Tiktok: "tiktok",
                         Twitter: "twitter",

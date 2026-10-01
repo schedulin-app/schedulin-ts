@@ -17,6 +17,7 @@ export namespace ListSocialAccountsResponse {
             profileImageUrl: string | null;
             refreshTokenValid: boolean;
             analyticsDisabledAt: string | null;
+            webhookSubscriptionFailedAt: string | null;
             createdAt: string;
             updatedAt: string;
         }
@@ -30,6 +31,7 @@ export namespace ListSocialAccountsResponse {
                 Linkedin: "linkedin",
                 Pinterest: "pinterest",
                 Reddit: "reddit",
+                Snapchat: "snapchat",
                 Threads: "threads",
                 Tiktok: "tiktok",
                 Twitter: "twitter",

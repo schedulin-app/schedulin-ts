@@ -31,6 +31,8 @@ export class TagsClient {
      *
      * @throws {@link Schedulin.UnauthorizedError}
      * @throws {@link Schedulin.InternalServerError}
+     * @throws {@link errors.SchedulinError}
+     * @throws {@link errors.SchedulinTimeoutError}
      *
      * @example
      *     await client.tags.list()
@@ -113,6 +115,8 @@ export class TagsClient {
      *
      * @throws {@link Schedulin.UnauthorizedError}
      * @throws {@link Schedulin.InternalServerError}
+     * @throws {@link errors.SchedulinError}
+     * @throws {@link errors.SchedulinTimeoutError}
      *
      * @example
      *     await client.tags.create({
@@ -192,6 +196,8 @@ export class TagsClient {
      *
      * @throws {@link Schedulin.UnauthorizedError}
      * @throws {@link Schedulin.InternalServerError}
+     * @throws {@link errors.SchedulinError}
+     * @throws {@link errors.SchedulinTimeoutError}
      *
      * @example
      *     await client.tags.update({
@@ -271,6 +277,8 @@ export class TagsClient {
      *
      * @throws {@link Schedulin.UnauthorizedError}
      * @throws {@link Schedulin.InternalServerError}
+     * @throws {@link errors.SchedulinError}
+     * @throws {@link errors.SchedulinTimeoutError}
      *
      * @example
      *     await client.tags.delete({
