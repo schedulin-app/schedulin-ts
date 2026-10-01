@@ -2,7 +2,7 @@
 
 import type { BaseClientOptions, BaseRequestOptions } from "../../../../BaseClient.js";
 import { type NormalizedClientOptionsWithAuth, normalizeClientOptionsWithAuth } from "../../../../BaseClient.js";
-import { mergeHeaders } from "../../../../core/headers.js";
+import { mergeHeaders, mergeOnlyDefinedHeaders } from "../../../../core/headers.js";
 import * as core from "../../../../core/index.js";
 import { mergeAdditionalBodyParameters } from "../../../../core/requestBody.js";
 import * as environments from "../../../../environments.js";
@@ -193,8 +193,9 @@ export class MediaClient {
      * @throws {@link errors.SchedulinTimeoutError}
      *
      * @example
+     *     import { createReadStream } from "fs";
      *     await client.media.upload({
-     *         file: "file"
+     *         file: fs.createReadStream("/path/to/your/file")
      *     })
      */
     public upload(
@@ -208,10 +209,26 @@ export class MediaClient {
         request: Schedulin.UploadMediaRequest,
         requestOptions?: MediaClient.RequestOptions,
     ): Promise<core.WithRawResponse<unknown>> {
+        const _body = await core.newFormData();
+        await _body.appendFile("file", request.file);
+        if (request.name != null) {
+            _body.append("name", request.name);
+        }
+
+        if (request.alt != null) {
+            _body.append("alt", request.alt);
+        }
+
+        if (request.contentType != null) {
+            _body.append("contentType", request.contentType);
+        }
+
+        const _maybeEncodedRequest = await _body.getRequest();
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
         const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             _authRequest.headers,
             this._options?.headers,
+            mergeOnlyDefinedHeaders({ ..._maybeEncodedRequest.headers }),
             requestOptions?.headers,
         );
         const _response = await core.fetcher({
@@ -223,10 +240,10 @@ export class MediaClient {
             ),
             method: "POST",
             headers: _headers,
-            contentType: "application/json",
             queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
-            requestType: "json",
-            body: mergeAdditionalBodyParameters(request, requestOptions?.additionalBodyParameters),
+            requestType: "file",
+            duplex: _maybeEncodedRequest.duplex,
+            body: _maybeEncodedRequest.body,
             timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
             maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
             abortSignal: requestOptions?.abortSignal,
@@ -424,7 +441,7 @@ export class MediaClient {
     /**
      * Delete a media object and remove its files from storage. Fails with a conflict when the media is attached to any post — remove it from those posts (or delete them) first.
      *
-     * @param {Schedulin.V0MediaDeleteRequest} request
+     * @param {Schedulin.DeleteMediaRequest} request
      * @param {MediaClient.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link Schedulin.UnauthorizedError}
@@ -433,19 +450,19 @@ export class MediaClient {
      * @throws {@link errors.SchedulinTimeoutError}
      *
      * @example
-     *     await client.media.v0MediaDelete({
+     *     await client.media.delete({
      *         id: "id"
      *     })
      */
-    public v0MediaDelete(
-        request: Schedulin.V0MediaDeleteRequest,
+    public delete(
+        request: Schedulin.DeleteMediaRequest,
         requestOptions?: MediaClient.RequestOptions,
     ): core.HttpResponsePromise<unknown> {
-        return core.HttpResponsePromise.fromPromise(this.__v0MediaDelete(request, requestOptions));
+        return core.HttpResponsePromise.fromPromise(this.__delete(request, requestOptions));
     }
 
-    private async __v0MediaDelete(
-        request: Schedulin.V0MediaDeleteRequest,
+    private async __delete(
+        request: Schedulin.DeleteMediaRequest,
         requestOptions?: MediaClient.RequestOptions,
     ): Promise<core.WithRawResponse<unknown>> {
         const { id, ..._body } = request;

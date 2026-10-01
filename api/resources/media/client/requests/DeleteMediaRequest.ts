@@ -6,6 +6,6 @@
  *         id: "id"
  *     }
  */
-export interface V0MediaDeleteRequest {
+export interface DeleteMediaRequest {
     id: string;
 }
