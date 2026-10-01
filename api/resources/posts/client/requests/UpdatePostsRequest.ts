@@ -34,8 +34,6 @@ export namespace UpdatePostsRequest {
         Draft: "DRAFT",
         Scheduled: "SCHEDULED",
         Processing: "PROCESSING",
-        Completed: "COMPLETED",
-        Failed: "FAILED",
     } as const;
     export type Status = (typeof Status)[keyof typeof Status];
 }

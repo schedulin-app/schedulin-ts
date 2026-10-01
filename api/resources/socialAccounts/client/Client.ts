@@ -444,7 +444,7 @@ export class SocialAccountsClient {
     }
 
     /**
-     * Set the IANA timezone (e.g. 'America/Los_Angeles') used to interpret queue times for this account.
+     * Set the IANA timezone (e.g. 'America/Los_Angeles') used to interpret queue times for this account. Unknown names and UTC-offset strings (e.g. '+05:00') are rejected with 422.
      *
      * @param {Schedulin.UpdateTimezoneSocialAccountsRequest} request
      * @param {SocialAccountsClient.RequestOptions} requestOptions - Request-specific configuration.
