@@ -251,7 +251,7 @@ export async function fetcherImpl<R = unknown>(args: Fetcher.Args): Promise<APIR
                 },
                 rawResponse: abortRawResponse,
             };
-        } else if (error instanceof Error && error.name === "AbortError") {
+        } else if (/* schedulin-patch: timeout-abort */ error === "timeout" || (error instanceof Error && (error.name === "AbortError" || error.name === "TimeoutError"))) {
             if (logger.isError()) {
                 const metadata = {
                     method: args.method,
