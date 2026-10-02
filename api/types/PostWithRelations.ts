@@ -26,4 +26,5 @@ export interface PostWithRelations {
     media: Schedulin.PostMedia[];
     thumbnail: Schedulin.PostMedia | null;
     tags: Schedulin.Tag[];
+    parts: Schedulin.PostThreadPart[];
 }

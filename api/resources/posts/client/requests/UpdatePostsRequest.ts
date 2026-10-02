@@ -14,6 +14,7 @@ export interface UpdatePostsRequest {
     platformConfiguration?: Record<string, unknown>;
     status?: UpdatePostsRequest.Status;
     tagIds?: string[];
+    parts?: UpdatePostsRequest.Parts.Item[];
 }
 
 export namespace UpdatePostsRequest {
@@ -41,4 +42,32 @@ export namespace UpdatePostsRequest {
         Processing: "PROCESSING",
     } as const;
     export type Status = (typeof Status)[keyof typeof Status];
+    export type Parts = Parts.Item[];
+
+    export namespace Parts {
+        export interface Item {
+            caption: string;
+            media?: Item.Media.Item[] | undefined;
+        }
+
+        export namespace Item {
+            export type Media = Media.Item[];
+
+            export namespace Media {
+                export interface Item {
+                    id?: string | undefined;
+                    url?: string | undefined;
+                    name?: string | undefined;
+                    mimeType?: string | undefined;
+                    width?: (number | null) | undefined;
+                    height?: (number | null) | undefined;
+                    size?: (number | null) | undefined;
+                    duration?: (number | null) | undefined;
+                    alt?: (string | null) | undefined;
+                    bucket?: string | undefined;
+                    key?: string | undefined;
+                }
+            }
+        }
+    }
 }

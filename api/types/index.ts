@@ -14,6 +14,7 @@ export * from "./PostMedia.js";
 export * from "./PostPublishDraft.js";
 export * from "./PostSearch.js";
 export * from "./PostStatus.js";
+export * from "./PostThreadPart.js";
 export * from "./PostWithRelations.js";
 export * from "./PresignedPost.js";
 export * from "./RateLimitErrorResponse.js";
