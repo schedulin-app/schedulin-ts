@@ -3,13 +3,12 @@
 /**
  * @example
  *     {
- *         id: "id",
- *         url: "url"
+ *         id: "id"
  *     }
  */
 export interface UpdateMediaRequest {
     id: string;
-    url: string;
+    url?: string;
     mimeType?: string;
     width?: number;
     height?: number;

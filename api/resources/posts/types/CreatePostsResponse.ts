@@ -10,6 +10,7 @@ export interface CreatePostsResponse {
     scheduledAt: string | null;
     platformConfiguration: Record<string, unknown> | null;
     media: CreatePostsResponse.Media.Item[];
+    socialAccountId: string;
     socialAccounts: Schedulin.SocialAccountPublic[];
     createdAt: string;
     updatedAt: string;

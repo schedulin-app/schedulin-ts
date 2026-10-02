@@ -1,5 +1,6 @@
 export * from "./ai/client/requests/index.js";
 export * as ai from "./ai/index.js";
+export * from "./ai/types/index.js";
 export * from "./media/client/requests/index.js";
 export * as media from "./media/index.js";
 export * from "./media/types/index.js";
@@ -16,3 +17,4 @@ export * as tags from "./tags/index.js";
 export * from "./tags/types/index.js";
 export * from "./webhooks/client/requests/index.js";
 export * as webhooks from "./webhooks/index.js";
+export * from "./webhooks/types/index.js";

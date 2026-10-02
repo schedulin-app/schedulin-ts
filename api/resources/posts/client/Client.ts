@@ -29,7 +29,11 @@ export class PostsClient {
      * @param {Schedulin.ListPostsRequest} request
      * @param {PostsClient.RequestOptions} requestOptions - Request-specific configuration.
      *
+     * @throws {@link Schedulin.BadRequestError}
      * @throws {@link Schedulin.UnauthorizedError}
+     * @throws {@link Schedulin.ForbiddenError}
+     * @throws {@link Schedulin.UnprocessableEntityError}
+     * @throws {@link Schedulin.TooManyRequestsError}
      * @throws {@link Schedulin.InternalServerError}
      * @throws {@link errors.SchedulinError}
      * @throws {@link errors.SchedulinTimeoutError}
@@ -93,9 +97,29 @@ export class PostsClient {
 
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
+                case 400:
+                    throw new Schedulin.BadRequestError(
+                        _response.error.body as Schedulin.ErrorResponse,
+                        _response.rawResponse,
+                    );
                 case 401:
                     throw new Schedulin.UnauthorizedError(
                         _response.error.body as Schedulin.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 403:
+                    throw new Schedulin.ForbiddenError(
+                        _response.error.body as Schedulin.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 422:
+                    throw new Schedulin.UnprocessableEntityError(
+                        _response.error.body as Schedulin.ValidationErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 429:
+                    throw new Schedulin.TooManyRequestsError(
+                        _response.error.body as Schedulin.RateLimitErrorResponse,
                         _response.rawResponse,
                     );
                 case 500:
@@ -121,7 +145,13 @@ export class PostsClient {
      * @param {Schedulin.PostCreate} request
      * @param {PostsClient.RequestOptions} requestOptions - Request-specific configuration.
      *
+     * @throws {@link Schedulin.BadRequestError}
      * @throws {@link Schedulin.UnauthorizedError}
+     * @throws {@link Schedulin.PaymentRequiredError}
+     * @throws {@link Schedulin.ForbiddenError}
+     * @throws {@link Schedulin.ConflictError}
+     * @throws {@link Schedulin.UnprocessableEntityError}
+     * @throws {@link Schedulin.TooManyRequestsError}
      * @throws {@link Schedulin.InternalServerError}
      * @throws {@link errors.SchedulinError}
      * @throws {@link errors.SchedulinTimeoutError}
@@ -174,9 +204,39 @@ export class PostsClient {
 
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
+                case 400:
+                    throw new Schedulin.BadRequestError(
+                        _response.error.body as Schedulin.ErrorResponse,
+                        _response.rawResponse,
+                    );
                 case 401:
                     throw new Schedulin.UnauthorizedError(
                         _response.error.body as Schedulin.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 402:
+                    throw new Schedulin.PaymentRequiredError(
+                        _response.error.body as Schedulin.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 403:
+                    throw new Schedulin.ForbiddenError(
+                        _response.error.body as Schedulin.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 409:
+                    throw new Schedulin.ConflictError(
+                        _response.error.body as Schedulin.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 422:
+                    throw new Schedulin.UnprocessableEntityError(
+                        _response.error.body as Schedulin.ValidationErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 429:
+                    throw new Schedulin.TooManyRequestsError(
+                        _response.error.body as Schedulin.RateLimitErrorResponse,
                         _response.rawResponse,
                     );
                 case 500:
@@ -202,7 +262,11 @@ export class PostsClient {
      * @param {Schedulin.CountByTabPostsRequest} request
      * @param {PostsClient.RequestOptions} requestOptions - Request-specific configuration.
      *
+     * @throws {@link Schedulin.BadRequestError}
      * @throws {@link Schedulin.UnauthorizedError}
+     * @throws {@link Schedulin.ForbiddenError}
+     * @throws {@link Schedulin.UnprocessableEntityError}
+     * @throws {@link Schedulin.TooManyRequestsError}
      * @throws {@link Schedulin.InternalServerError}
      * @throws {@link errors.SchedulinError}
      * @throws {@link errors.SchedulinTimeoutError}
@@ -213,14 +277,14 @@ export class PostsClient {
     public countByTab(
         request: Schedulin.CountByTabPostsRequest = {},
         requestOptions?: PostsClient.RequestOptions,
-    ): core.HttpResponsePromise<unknown> {
+    ): core.HttpResponsePromise<Schedulin.CountByTabPostsResponse> {
         return core.HttpResponsePromise.fromPromise(this.__countByTab(request, requestOptions));
     }
 
     private async __countByTab(
         request: Schedulin.CountByTabPostsRequest = {},
         requestOptions?: PostsClient.RequestOptions,
-    ): Promise<core.WithRawResponse<unknown>> {
+    ): Promise<core.WithRawResponse<Schedulin.CountByTabPostsResponse>> {
         const { socialAccountIds } = request;
         const _queryParams: Record<string, unknown> = {
             socialAccountIds,
@@ -252,14 +316,34 @@ export class PostsClient {
             logging: this._options.logging,
         });
         if (_response.ok) {
-            return { data: _response.body, rawResponse: _response.rawResponse };
+            return { data: _response.body as Schedulin.CountByTabPostsResponse, rawResponse: _response.rawResponse };
         }
 
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
+                case 400:
+                    throw new Schedulin.BadRequestError(
+                        _response.error.body as Schedulin.ErrorResponse,
+                        _response.rawResponse,
+                    );
                 case 401:
                     throw new Schedulin.UnauthorizedError(
                         _response.error.body as Schedulin.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 403:
+                    throw new Schedulin.ForbiddenError(
+                        _response.error.body as Schedulin.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 422:
+                    throw new Schedulin.UnprocessableEntityError(
+                        _response.error.body as Schedulin.ValidationErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 429:
+                    throw new Schedulin.TooManyRequestsError(
+                        _response.error.body as Schedulin.RateLimitErrorResponse,
                         _response.rawResponse,
                     );
                 case 500:
@@ -285,7 +369,12 @@ export class PostsClient {
      * @param {Schedulin.RetrievePostsRequest} request
      * @param {PostsClient.RequestOptions} requestOptions - Request-specific configuration.
      *
+     * @throws {@link Schedulin.BadRequestError}
      * @throws {@link Schedulin.UnauthorizedError}
+     * @throws {@link Schedulin.ForbiddenError}
+     * @throws {@link Schedulin.NotFoundError}
+     * @throws {@link Schedulin.UnprocessableEntityError}
+     * @throws {@link Schedulin.TooManyRequestsError}
      * @throws {@link Schedulin.InternalServerError}
      * @throws {@link errors.SchedulinError}
      * @throws {@link errors.SchedulinTimeoutError}
@@ -335,9 +424,34 @@ export class PostsClient {
 
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
+                case 400:
+                    throw new Schedulin.BadRequestError(
+                        _response.error.body as Schedulin.ErrorResponse,
+                        _response.rawResponse,
+                    );
                 case 401:
                     throw new Schedulin.UnauthorizedError(
                         _response.error.body as Schedulin.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 403:
+                    throw new Schedulin.ForbiddenError(
+                        _response.error.body as Schedulin.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 404:
+                    throw new Schedulin.NotFoundError(
+                        _response.error.body as Schedulin.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 422:
+                    throw new Schedulin.UnprocessableEntityError(
+                        _response.error.body as Schedulin.ValidationErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 429:
+                    throw new Schedulin.TooManyRequestsError(
+                        _response.error.body as Schedulin.RateLimitErrorResponse,
                         _response.rawResponse,
                     );
                 case 500:
@@ -363,7 +477,14 @@ export class PostsClient {
      * @param {Schedulin.UpdatePostsRequest} request
      * @param {PostsClient.RequestOptions} requestOptions - Request-specific configuration.
      *
+     * @throws {@link Schedulin.BadRequestError}
      * @throws {@link Schedulin.UnauthorizedError}
+     * @throws {@link Schedulin.PaymentRequiredError}
+     * @throws {@link Schedulin.ForbiddenError}
+     * @throws {@link Schedulin.NotFoundError}
+     * @throws {@link Schedulin.ConflictError}
+     * @throws {@link Schedulin.UnprocessableEntityError}
+     * @throws {@link Schedulin.TooManyRequestsError}
      * @throws {@link Schedulin.InternalServerError}
      * @throws {@link errors.SchedulinError}
      * @throws {@link errors.SchedulinTimeoutError}
@@ -416,9 +537,44 @@ export class PostsClient {
 
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
+                case 400:
+                    throw new Schedulin.BadRequestError(
+                        _response.error.body as Schedulin.ErrorResponse,
+                        _response.rawResponse,
+                    );
                 case 401:
                     throw new Schedulin.UnauthorizedError(
                         _response.error.body as Schedulin.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 402:
+                    throw new Schedulin.PaymentRequiredError(
+                        _response.error.body as Schedulin.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 403:
+                    throw new Schedulin.ForbiddenError(
+                        _response.error.body as Schedulin.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 404:
+                    throw new Schedulin.NotFoundError(
+                        _response.error.body as Schedulin.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 409:
+                    throw new Schedulin.ConflictError(
+                        _response.error.body as Schedulin.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 422:
+                    throw new Schedulin.UnprocessableEntityError(
+                        _response.error.body as Schedulin.ValidationErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 429:
+                    throw new Schedulin.TooManyRequestsError(
+                        _response.error.body as Schedulin.RateLimitErrorResponse,
                         _response.rawResponse,
                     );
                 case 500:
@@ -444,7 +600,13 @@ export class PostsClient {
      * @param {Schedulin.DeletePostsRequest} request
      * @param {PostsClient.RequestOptions} requestOptions - Request-specific configuration.
      *
+     * @throws {@link Schedulin.BadRequestError}
      * @throws {@link Schedulin.UnauthorizedError}
+     * @throws {@link Schedulin.ForbiddenError}
+     * @throws {@link Schedulin.NotFoundError}
+     * @throws {@link Schedulin.ConflictError}
+     * @throws {@link Schedulin.UnprocessableEntityError}
+     * @throws {@link Schedulin.TooManyRequestsError}
      * @throws {@link Schedulin.InternalServerError}
      * @throws {@link errors.SchedulinError}
      * @throws {@link errors.SchedulinTimeoutError}
@@ -497,9 +659,39 @@ export class PostsClient {
 
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
+                case 400:
+                    throw new Schedulin.BadRequestError(
+                        _response.error.body as Schedulin.ErrorResponse,
+                        _response.rawResponse,
+                    );
                 case 401:
                     throw new Schedulin.UnauthorizedError(
                         _response.error.body as Schedulin.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 403:
+                    throw new Schedulin.ForbiddenError(
+                        _response.error.body as Schedulin.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 404:
+                    throw new Schedulin.NotFoundError(
+                        _response.error.body as Schedulin.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 409:
+                    throw new Schedulin.ConflictError(
+                        _response.error.body as Schedulin.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 422:
+                    throw new Schedulin.UnprocessableEntityError(
+                        _response.error.body as Schedulin.ValidationErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 429:
+                    throw new Schedulin.TooManyRequestsError(
+                        _response.error.body as Schedulin.RateLimitErrorResponse,
                         _response.rawResponse,
                     );
                 case 500:
@@ -525,7 +717,12 @@ export class PostsClient {
      * @param {Schedulin.AnalyticsSummaryPostsRequest} request
      * @param {PostsClient.RequestOptions} requestOptions - Request-specific configuration.
      *
+     * @throws {@link Schedulin.BadRequestError}
      * @throws {@link Schedulin.UnauthorizedError}
+     * @throws {@link Schedulin.ForbiddenError}
+     * @throws {@link Schedulin.NotFoundError}
+     * @throws {@link Schedulin.UnprocessableEntityError}
+     * @throws {@link Schedulin.TooManyRequestsError}
      * @throws {@link Schedulin.InternalServerError}
      * @throws {@link errors.SchedulinError}
      * @throws {@link errors.SchedulinTimeoutError}
@@ -578,9 +775,34 @@ export class PostsClient {
 
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
+                case 400:
+                    throw new Schedulin.BadRequestError(
+                        _response.error.body as Schedulin.ErrorResponse,
+                        _response.rawResponse,
+                    );
                 case 401:
                     throw new Schedulin.UnauthorizedError(
                         _response.error.body as Schedulin.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 403:
+                    throw new Schedulin.ForbiddenError(
+                        _response.error.body as Schedulin.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 404:
+                    throw new Schedulin.NotFoundError(
+                        _response.error.body as Schedulin.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 422:
+                    throw new Schedulin.UnprocessableEntityError(
+                        _response.error.body as Schedulin.ValidationErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 429:
+                    throw new Schedulin.TooManyRequestsError(
+                        _response.error.body as Schedulin.RateLimitErrorResponse,
                         _response.rawResponse,
                     );
                 case 500:
@@ -611,7 +833,12 @@ export class PostsClient {
      * @param {Schedulin.AnalyticsSeriesPostsRequest} request
      * @param {PostsClient.RequestOptions} requestOptions - Request-specific configuration.
      *
+     * @throws {@link Schedulin.BadRequestError}
      * @throws {@link Schedulin.UnauthorizedError}
+     * @throws {@link Schedulin.ForbiddenError}
+     * @throws {@link Schedulin.NotFoundError}
+     * @throws {@link Schedulin.UnprocessableEntityError}
+     * @throws {@link Schedulin.TooManyRequestsError}
      * @throws {@link Schedulin.InternalServerError}
      * @throws {@link errors.SchedulinError}
      * @throws {@link errors.SchedulinTimeoutError}
@@ -671,9 +898,34 @@ export class PostsClient {
 
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
+                case 400:
+                    throw new Schedulin.BadRequestError(
+                        _response.error.body as Schedulin.ErrorResponse,
+                        _response.rawResponse,
+                    );
                 case 401:
                     throw new Schedulin.UnauthorizedError(
                         _response.error.body as Schedulin.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 403:
+                    throw new Schedulin.ForbiddenError(
+                        _response.error.body as Schedulin.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 404:
+                    throw new Schedulin.NotFoundError(
+                        _response.error.body as Schedulin.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 422:
+                    throw new Schedulin.UnprocessableEntityError(
+                        _response.error.body as Schedulin.ValidationErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 429:
+                    throw new Schedulin.TooManyRequestsError(
+                        _response.error.body as Schedulin.RateLimitErrorResponse,
                         _response.rawResponse,
                     );
                 case 500:
@@ -704,7 +956,14 @@ export class PostsClient {
      * @param {Schedulin.PublishDraftPostsRequest} request
      * @param {PostsClient.RequestOptions} requestOptions - Request-specific configuration.
      *
+     * @throws {@link Schedulin.BadRequestError}
      * @throws {@link Schedulin.UnauthorizedError}
+     * @throws {@link Schedulin.PaymentRequiredError}
+     * @throws {@link Schedulin.ForbiddenError}
+     * @throws {@link Schedulin.NotFoundError}
+     * @throws {@link Schedulin.ConflictError}
+     * @throws {@link Schedulin.UnprocessableEntityError}
+     * @throws {@link Schedulin.TooManyRequestsError}
      * @throws {@link Schedulin.InternalServerError}
      * @throws {@link errors.SchedulinError}
      * @throws {@link errors.SchedulinTimeoutError}
@@ -757,9 +1016,44 @@ export class PostsClient {
 
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
+                case 400:
+                    throw new Schedulin.BadRequestError(
+                        _response.error.body as Schedulin.ErrorResponse,
+                        _response.rawResponse,
+                    );
                 case 401:
                     throw new Schedulin.UnauthorizedError(
                         _response.error.body as Schedulin.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 402:
+                    throw new Schedulin.PaymentRequiredError(
+                        _response.error.body as Schedulin.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 403:
+                    throw new Schedulin.ForbiddenError(
+                        _response.error.body as Schedulin.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 404:
+                    throw new Schedulin.NotFoundError(
+                        _response.error.body as Schedulin.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 409:
+                    throw new Schedulin.ConflictError(
+                        _response.error.body as Schedulin.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 422:
+                    throw new Schedulin.UnprocessableEntityError(
+                        _response.error.body as Schedulin.ValidationErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 429:
+                    throw new Schedulin.TooManyRequestsError(
+                        _response.error.body as Schedulin.RateLimitErrorResponse,
                         _response.rawResponse,
                     );
                 case 500:
@@ -785,7 +1079,13 @@ export class PostsClient {
      * @param {Schedulin.UpdateTagsPostsRequest} request
      * @param {PostsClient.RequestOptions} requestOptions - Request-specific configuration.
      *
+     * @throws {@link Schedulin.BadRequestError}
      * @throws {@link Schedulin.UnauthorizedError}
+     * @throws {@link Schedulin.ForbiddenError}
+     * @throws {@link Schedulin.NotFoundError}
+     * @throws {@link Schedulin.ConflictError}
+     * @throws {@link Schedulin.UnprocessableEntityError}
+     * @throws {@link Schedulin.TooManyRequestsError}
      * @throws {@link Schedulin.InternalServerError}
      * @throws {@link errors.SchedulinError}
      * @throws {@link errors.SchedulinTimeoutError}
@@ -839,9 +1139,39 @@ export class PostsClient {
 
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
+                case 400:
+                    throw new Schedulin.BadRequestError(
+                        _response.error.body as Schedulin.ErrorResponse,
+                        _response.rawResponse,
+                    );
                 case 401:
                     throw new Schedulin.UnauthorizedError(
                         _response.error.body as Schedulin.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 403:
+                    throw new Schedulin.ForbiddenError(
+                        _response.error.body as Schedulin.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 404:
+                    throw new Schedulin.NotFoundError(
+                        _response.error.body as Schedulin.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 409:
+                    throw new Schedulin.ConflictError(
+                        _response.error.body as Schedulin.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 422:
+                    throw new Schedulin.UnprocessableEntityError(
+                        _response.error.body as Schedulin.ValidationErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 429:
+                    throw new Schedulin.TooManyRequestsError(
+                        _response.error.body as Schedulin.RateLimitErrorResponse,
                         _response.rawResponse,
                     );
                 case 500:

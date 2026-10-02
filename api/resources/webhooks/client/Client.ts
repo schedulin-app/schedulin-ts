@@ -28,7 +28,11 @@ export class WebhooksClient {
      *
      * @param {WebhooksClient.RequestOptions} requestOptions - Request-specific configuration.
      *
+     * @throws {@link Schedulin.BadRequestError}
      * @throws {@link Schedulin.UnauthorizedError}
+     * @throws {@link Schedulin.ForbiddenError}
+     * @throws {@link Schedulin.UnprocessableEntityError}
+     * @throws {@link Schedulin.TooManyRequestsError}
      * @throws {@link Schedulin.InternalServerError}
      * @throws {@link errors.SchedulinError}
      * @throws {@link errors.SchedulinTimeoutError}
@@ -36,11 +40,15 @@ export class WebhooksClient {
      * @example
      *     await client.webhooks.list()
      */
-    public list(requestOptions?: WebhooksClient.RequestOptions): core.HttpResponsePromise<unknown> {
+    public list(
+        requestOptions?: WebhooksClient.RequestOptions,
+    ): core.HttpResponsePromise<Schedulin.ListWebhooksResponse> {
         return core.HttpResponsePromise.fromPromise(this.__list(requestOptions));
     }
 
-    private async __list(requestOptions?: WebhooksClient.RequestOptions): Promise<core.WithRawResponse<unknown>> {
+    private async __list(
+        requestOptions?: WebhooksClient.RequestOptions,
+    ): Promise<core.WithRawResponse<Schedulin.ListWebhooksResponse>> {
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
         const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             _authRequest.headers,
@@ -64,14 +72,34 @@ export class WebhooksClient {
             logging: this._options.logging,
         });
         if (_response.ok) {
-            return { data: _response.body, rawResponse: _response.rawResponse };
+            return { data: _response.body as Schedulin.ListWebhooksResponse, rawResponse: _response.rawResponse };
         }
 
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
+                case 400:
+                    throw new Schedulin.BadRequestError(
+                        _response.error.body as Schedulin.ErrorResponse,
+                        _response.rawResponse,
+                    );
                 case 401:
                     throw new Schedulin.UnauthorizedError(
                         _response.error.body as Schedulin.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 403:
+                    throw new Schedulin.ForbiddenError(
+                        _response.error.body as Schedulin.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 422:
+                    throw new Schedulin.UnprocessableEntityError(
+                        _response.error.body as Schedulin.ValidationErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 429:
+                    throw new Schedulin.TooManyRequestsError(
+                        _response.error.body as Schedulin.RateLimitErrorResponse,
                         _response.rawResponse,
                     );
                 case 500:
@@ -97,7 +125,12 @@ export class WebhooksClient {
      * @param {Schedulin.CreateWebhooksRequest} request
      * @param {WebhooksClient.RequestOptions} requestOptions - Request-specific configuration.
      *
+     * @throws {@link Schedulin.BadRequestError}
      * @throws {@link Schedulin.UnauthorizedError}
+     * @throws {@link Schedulin.ForbiddenError}
+     * @throws {@link Schedulin.ConflictError}
+     * @throws {@link Schedulin.UnprocessableEntityError}
+     * @throws {@link Schedulin.TooManyRequestsError}
      * @throws {@link Schedulin.InternalServerError}
      * @throws {@link errors.SchedulinError}
      * @throws {@link errors.SchedulinTimeoutError}
@@ -111,14 +144,14 @@ export class WebhooksClient {
     public create(
         request: Schedulin.CreateWebhooksRequest,
         requestOptions?: WebhooksClient.RequestOptions,
-    ): core.HttpResponsePromise<unknown> {
+    ): core.HttpResponsePromise<Schedulin.WebhookEndpoint> {
         return core.HttpResponsePromise.fromPromise(this.__create(request, requestOptions));
     }
 
     private async __create(
         request: Schedulin.CreateWebhooksRequest,
         requestOptions?: WebhooksClient.RequestOptions,
-    ): Promise<core.WithRawResponse<unknown>> {
+    ): Promise<core.WithRawResponse<Schedulin.WebhookEndpoint>> {
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
         const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             _authRequest.headers,
@@ -145,14 +178,39 @@ export class WebhooksClient {
             logging: this._options.logging,
         });
         if (_response.ok) {
-            return { data: _response.body, rawResponse: _response.rawResponse };
+            return { data: _response.body as Schedulin.WebhookEndpoint, rawResponse: _response.rawResponse };
         }
 
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
+                case 400:
+                    throw new Schedulin.BadRequestError(
+                        _response.error.body as Schedulin.ErrorResponse,
+                        _response.rawResponse,
+                    );
                 case 401:
                     throw new Schedulin.UnauthorizedError(
                         _response.error.body as Schedulin.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 403:
+                    throw new Schedulin.ForbiddenError(
+                        _response.error.body as Schedulin.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 409:
+                    throw new Schedulin.ConflictError(
+                        _response.error.body as Schedulin.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 422:
+                    throw new Schedulin.UnprocessableEntityError(
+                        _response.error.body as Schedulin.ValidationErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 429:
+                    throw new Schedulin.TooManyRequestsError(
+                        _response.error.body as Schedulin.RateLimitErrorResponse,
                         _response.rawResponse,
                     );
                 case 500:
@@ -178,7 +236,12 @@ export class WebhooksClient {
      * @param {Schedulin.RetrieveWebhooksRequest} request
      * @param {WebhooksClient.RequestOptions} requestOptions - Request-specific configuration.
      *
+     * @throws {@link Schedulin.BadRequestError}
      * @throws {@link Schedulin.UnauthorizedError}
+     * @throws {@link Schedulin.ForbiddenError}
+     * @throws {@link Schedulin.NotFoundError}
+     * @throws {@link Schedulin.UnprocessableEntityError}
+     * @throws {@link Schedulin.TooManyRequestsError}
      * @throws {@link Schedulin.InternalServerError}
      * @throws {@link errors.SchedulinError}
      * @throws {@link errors.SchedulinTimeoutError}
@@ -191,14 +254,14 @@ export class WebhooksClient {
     public retrieve(
         request: Schedulin.RetrieveWebhooksRequest,
         requestOptions?: WebhooksClient.RequestOptions,
-    ): core.HttpResponsePromise<unknown> {
+    ): core.HttpResponsePromise<Schedulin.WebhookEndpoint> {
         return core.HttpResponsePromise.fromPromise(this.__retrieve(request, requestOptions));
     }
 
     private async __retrieve(
         request: Schedulin.RetrieveWebhooksRequest,
         requestOptions?: WebhooksClient.RequestOptions,
-    ): Promise<core.WithRawResponse<unknown>> {
+    ): Promise<core.WithRawResponse<Schedulin.WebhookEndpoint>> {
         const { id } = request;
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
         const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
@@ -223,14 +286,39 @@ export class WebhooksClient {
             logging: this._options.logging,
         });
         if (_response.ok) {
-            return { data: _response.body, rawResponse: _response.rawResponse };
+            return { data: _response.body as Schedulin.WebhookEndpoint, rawResponse: _response.rawResponse };
         }
 
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
+                case 400:
+                    throw new Schedulin.BadRequestError(
+                        _response.error.body as Schedulin.ErrorResponse,
+                        _response.rawResponse,
+                    );
                 case 401:
                     throw new Schedulin.UnauthorizedError(
                         _response.error.body as Schedulin.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 403:
+                    throw new Schedulin.ForbiddenError(
+                        _response.error.body as Schedulin.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 404:
+                    throw new Schedulin.NotFoundError(
+                        _response.error.body as Schedulin.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 422:
+                    throw new Schedulin.UnprocessableEntityError(
+                        _response.error.body as Schedulin.ValidationErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 429:
+                    throw new Schedulin.TooManyRequestsError(
+                        _response.error.body as Schedulin.RateLimitErrorResponse,
                         _response.rawResponse,
                     );
                 case 500:
@@ -256,7 +344,13 @@ export class WebhooksClient {
      * @param {Schedulin.DeleteWebhooksRequest} request
      * @param {WebhooksClient.RequestOptions} requestOptions - Request-specific configuration.
      *
+     * @throws {@link Schedulin.BadRequestError}
      * @throws {@link Schedulin.UnauthorizedError}
+     * @throws {@link Schedulin.ForbiddenError}
+     * @throws {@link Schedulin.NotFoundError}
+     * @throws {@link Schedulin.ConflictError}
+     * @throws {@link Schedulin.UnprocessableEntityError}
+     * @throws {@link Schedulin.TooManyRequestsError}
      * @throws {@link Schedulin.InternalServerError}
      * @throws {@link errors.SchedulinError}
      * @throws {@link errors.SchedulinTimeoutError}
@@ -269,14 +363,14 @@ export class WebhooksClient {
     public delete(
         request: Schedulin.DeleteWebhooksRequest,
         requestOptions?: WebhooksClient.RequestOptions,
-    ): core.HttpResponsePromise<unknown> {
+    ): core.HttpResponsePromise<Schedulin.DeleteWebhooksResponse> {
         return core.HttpResponsePromise.fromPromise(this.__delete(request, requestOptions));
     }
 
     private async __delete(
         request: Schedulin.DeleteWebhooksRequest,
         requestOptions?: WebhooksClient.RequestOptions,
-    ): Promise<core.WithRawResponse<unknown>> {
+    ): Promise<core.WithRawResponse<Schedulin.DeleteWebhooksResponse>> {
         const { id, ..._body } = request;
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
         const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
@@ -304,14 +398,44 @@ export class WebhooksClient {
             logging: this._options.logging,
         });
         if (_response.ok) {
-            return { data: _response.body, rawResponse: _response.rawResponse };
+            return { data: _response.body as Schedulin.DeleteWebhooksResponse, rawResponse: _response.rawResponse };
         }
 
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
+                case 400:
+                    throw new Schedulin.BadRequestError(
+                        _response.error.body as Schedulin.ErrorResponse,
+                        _response.rawResponse,
+                    );
                 case 401:
                     throw new Schedulin.UnauthorizedError(
                         _response.error.body as Schedulin.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 403:
+                    throw new Schedulin.ForbiddenError(
+                        _response.error.body as Schedulin.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 404:
+                    throw new Schedulin.NotFoundError(
+                        _response.error.body as Schedulin.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 409:
+                    throw new Schedulin.ConflictError(
+                        _response.error.body as Schedulin.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 422:
+                    throw new Schedulin.UnprocessableEntityError(
+                        _response.error.body as Schedulin.ValidationErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 429:
+                    throw new Schedulin.TooManyRequestsError(
+                        _response.error.body as Schedulin.RateLimitErrorResponse,
                         _response.rawResponse,
                     );
                 case 500:
@@ -337,7 +461,13 @@ export class WebhooksClient {
      * @param {Schedulin.UpdateWebhooksRequest} request
      * @param {WebhooksClient.RequestOptions} requestOptions - Request-specific configuration.
      *
+     * @throws {@link Schedulin.BadRequestError}
      * @throws {@link Schedulin.UnauthorizedError}
+     * @throws {@link Schedulin.ForbiddenError}
+     * @throws {@link Schedulin.NotFoundError}
+     * @throws {@link Schedulin.ConflictError}
+     * @throws {@link Schedulin.UnprocessableEntityError}
+     * @throws {@link Schedulin.TooManyRequestsError}
      * @throws {@link Schedulin.InternalServerError}
      * @throws {@link errors.SchedulinError}
      * @throws {@link errors.SchedulinTimeoutError}
@@ -350,14 +480,14 @@ export class WebhooksClient {
     public update(
         request: Schedulin.UpdateWebhooksRequest,
         requestOptions?: WebhooksClient.RequestOptions,
-    ): core.HttpResponsePromise<unknown> {
+    ): core.HttpResponsePromise<Schedulin.WebhookEndpoint> {
         return core.HttpResponsePromise.fromPromise(this.__update(request, requestOptions));
     }
 
     private async __update(
         request: Schedulin.UpdateWebhooksRequest,
         requestOptions?: WebhooksClient.RequestOptions,
-    ): Promise<core.WithRawResponse<unknown>> {
+    ): Promise<core.WithRawResponse<Schedulin.WebhookEndpoint>> {
         const { id, ..._body } = request;
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
         const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
@@ -385,14 +515,44 @@ export class WebhooksClient {
             logging: this._options.logging,
         });
         if (_response.ok) {
-            return { data: _response.body, rawResponse: _response.rawResponse };
+            return { data: _response.body as Schedulin.WebhookEndpoint, rawResponse: _response.rawResponse };
         }
 
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
+                case 400:
+                    throw new Schedulin.BadRequestError(
+                        _response.error.body as Schedulin.ErrorResponse,
+                        _response.rawResponse,
+                    );
                 case 401:
                     throw new Schedulin.UnauthorizedError(
                         _response.error.body as Schedulin.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 403:
+                    throw new Schedulin.ForbiddenError(
+                        _response.error.body as Schedulin.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 404:
+                    throw new Schedulin.NotFoundError(
+                        _response.error.body as Schedulin.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 409:
+                    throw new Schedulin.ConflictError(
+                        _response.error.body as Schedulin.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 422:
+                    throw new Schedulin.UnprocessableEntityError(
+                        _response.error.body as Schedulin.ValidationErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 429:
+                    throw new Schedulin.TooManyRequestsError(
+                        _response.error.body as Schedulin.RateLimitErrorResponse,
                         _response.rawResponse,
                     );
                 case 500:
@@ -418,7 +578,13 @@ export class WebhooksClient {
      * @param {Schedulin.RotateSecretWebhooksRequest} request
      * @param {WebhooksClient.RequestOptions} requestOptions - Request-specific configuration.
      *
+     * @throws {@link Schedulin.BadRequestError}
      * @throws {@link Schedulin.UnauthorizedError}
+     * @throws {@link Schedulin.ForbiddenError}
+     * @throws {@link Schedulin.NotFoundError}
+     * @throws {@link Schedulin.ConflictError}
+     * @throws {@link Schedulin.UnprocessableEntityError}
+     * @throws {@link Schedulin.TooManyRequestsError}
      * @throws {@link Schedulin.InternalServerError}
      * @throws {@link errors.SchedulinError}
      * @throws {@link errors.SchedulinTimeoutError}
@@ -431,14 +597,14 @@ export class WebhooksClient {
     public rotateSecret(
         request: Schedulin.RotateSecretWebhooksRequest,
         requestOptions?: WebhooksClient.RequestOptions,
-    ): core.HttpResponsePromise<unknown> {
+    ): core.HttpResponsePromise<Schedulin.WebhookEndpoint> {
         return core.HttpResponsePromise.fromPromise(this.__rotateSecret(request, requestOptions));
     }
 
     private async __rotateSecret(
         request: Schedulin.RotateSecretWebhooksRequest,
         requestOptions?: WebhooksClient.RequestOptions,
-    ): Promise<core.WithRawResponse<unknown>> {
+    ): Promise<core.WithRawResponse<Schedulin.WebhookEndpoint>> {
         const { id, ..._body } = request;
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
         const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
@@ -466,14 +632,44 @@ export class WebhooksClient {
             logging: this._options.logging,
         });
         if (_response.ok) {
-            return { data: _response.body, rawResponse: _response.rawResponse };
+            return { data: _response.body as Schedulin.WebhookEndpoint, rawResponse: _response.rawResponse };
         }
 
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
+                case 400:
+                    throw new Schedulin.BadRequestError(
+                        _response.error.body as Schedulin.ErrorResponse,
+                        _response.rawResponse,
+                    );
                 case 401:
                     throw new Schedulin.UnauthorizedError(
                         _response.error.body as Schedulin.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 403:
+                    throw new Schedulin.ForbiddenError(
+                        _response.error.body as Schedulin.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 404:
+                    throw new Schedulin.NotFoundError(
+                        _response.error.body as Schedulin.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 409:
+                    throw new Schedulin.ConflictError(
+                        _response.error.body as Schedulin.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 422:
+                    throw new Schedulin.UnprocessableEntityError(
+                        _response.error.body as Schedulin.ValidationErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 429:
+                    throw new Schedulin.TooManyRequestsError(
+                        _response.error.body as Schedulin.RateLimitErrorResponse,
                         _response.rawResponse,
                     );
                 case 500:
@@ -504,7 +700,13 @@ export class WebhooksClient {
      * @param {Schedulin.TestWebhooksRequest} request
      * @param {WebhooksClient.RequestOptions} requestOptions - Request-specific configuration.
      *
+     * @throws {@link Schedulin.BadRequestError}
      * @throws {@link Schedulin.UnauthorizedError}
+     * @throws {@link Schedulin.ForbiddenError}
+     * @throws {@link Schedulin.NotFoundError}
+     * @throws {@link Schedulin.ConflictError}
+     * @throws {@link Schedulin.UnprocessableEntityError}
+     * @throws {@link Schedulin.TooManyRequestsError}
      * @throws {@link Schedulin.InternalServerError}
      * @throws {@link errors.SchedulinError}
      * @throws {@link errors.SchedulinTimeoutError}
@@ -517,14 +719,14 @@ export class WebhooksClient {
     public test(
         request: Schedulin.TestWebhooksRequest,
         requestOptions?: WebhooksClient.RequestOptions,
-    ): core.HttpResponsePromise<unknown> {
+    ): core.HttpResponsePromise<Schedulin.TestWebhooksResponse> {
         return core.HttpResponsePromise.fromPromise(this.__test(request, requestOptions));
     }
 
     private async __test(
         request: Schedulin.TestWebhooksRequest,
         requestOptions?: WebhooksClient.RequestOptions,
-    ): Promise<core.WithRawResponse<unknown>> {
+    ): Promise<core.WithRawResponse<Schedulin.TestWebhooksResponse>> {
         const { id, ..._body } = request;
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
         const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
@@ -552,14 +754,44 @@ export class WebhooksClient {
             logging: this._options.logging,
         });
         if (_response.ok) {
-            return { data: _response.body, rawResponse: _response.rawResponse };
+            return { data: _response.body as Schedulin.TestWebhooksResponse, rawResponse: _response.rawResponse };
         }
 
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
+                case 400:
+                    throw new Schedulin.BadRequestError(
+                        _response.error.body as Schedulin.ErrorResponse,
+                        _response.rawResponse,
+                    );
                 case 401:
                     throw new Schedulin.UnauthorizedError(
                         _response.error.body as Schedulin.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 403:
+                    throw new Schedulin.ForbiddenError(
+                        _response.error.body as Schedulin.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 404:
+                    throw new Schedulin.NotFoundError(
+                        _response.error.body as Schedulin.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 409:
+                    throw new Schedulin.ConflictError(
+                        _response.error.body as Schedulin.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 422:
+                    throw new Schedulin.UnprocessableEntityError(
+                        _response.error.body as Schedulin.ValidationErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 429:
+                    throw new Schedulin.TooManyRequestsError(
+                        _response.error.body as Schedulin.RateLimitErrorResponse,
                         _response.rawResponse,
                     );
                 case 500:
@@ -585,7 +817,12 @@ export class WebhooksClient {
      * @param {Schedulin.ListDeliveriesWebhooksRequest} request
      * @param {WebhooksClient.RequestOptions} requestOptions - Request-specific configuration.
      *
+     * @throws {@link Schedulin.BadRequestError}
      * @throws {@link Schedulin.UnauthorizedError}
+     * @throws {@link Schedulin.ForbiddenError}
+     * @throws {@link Schedulin.NotFoundError}
+     * @throws {@link Schedulin.UnprocessableEntityError}
+     * @throws {@link Schedulin.TooManyRequestsError}
      * @throws {@link Schedulin.InternalServerError}
      * @throws {@link errors.SchedulinError}
      * @throws {@link errors.SchedulinTimeoutError}
@@ -598,14 +835,14 @@ export class WebhooksClient {
     public listDeliveries(
         request: Schedulin.ListDeliveriesWebhooksRequest,
         requestOptions?: WebhooksClient.RequestOptions,
-    ): core.HttpResponsePromise<unknown> {
+    ): core.HttpResponsePromise<Schedulin.ListDeliveriesWebhooksResponse> {
         return core.HttpResponsePromise.fromPromise(this.__listDeliveries(request, requestOptions));
     }
 
     private async __listDeliveries(
         request: Schedulin.ListDeliveriesWebhooksRequest,
         requestOptions?: WebhooksClient.RequestOptions,
-    ): Promise<core.WithRawResponse<unknown>> {
+    ): Promise<core.WithRawResponse<Schedulin.ListDeliveriesWebhooksResponse>> {
         const { id, limit, page } = request;
         const _queryParams: Record<string, unknown> = {
             limit,
@@ -638,14 +875,42 @@ export class WebhooksClient {
             logging: this._options.logging,
         });
         if (_response.ok) {
-            return { data: _response.body, rawResponse: _response.rawResponse };
+            return {
+                data: _response.body as Schedulin.ListDeliveriesWebhooksResponse,
+                rawResponse: _response.rawResponse,
+            };
         }
 
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
+                case 400:
+                    throw new Schedulin.BadRequestError(
+                        _response.error.body as Schedulin.ErrorResponse,
+                        _response.rawResponse,
+                    );
                 case 401:
                     throw new Schedulin.UnauthorizedError(
                         _response.error.body as Schedulin.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 403:
+                    throw new Schedulin.ForbiddenError(
+                        _response.error.body as Schedulin.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 404:
+                    throw new Schedulin.NotFoundError(
+                        _response.error.body as Schedulin.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 422:
+                    throw new Schedulin.UnprocessableEntityError(
+                        _response.error.body as Schedulin.ValidationErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 429:
+                    throw new Schedulin.TooManyRequestsError(
+                        _response.error.body as Schedulin.RateLimitErrorResponse,
                         _response.rawResponse,
                     );
                 case 500:

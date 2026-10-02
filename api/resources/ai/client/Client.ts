@@ -29,7 +29,12 @@ export class AiClient {
      * @param {Schedulin.GenerateImageAiRequest} request
      * @param {AiClient.RequestOptions} requestOptions - Request-specific configuration.
      *
+     * @throws {@link Schedulin.BadRequestError}
      * @throws {@link Schedulin.UnauthorizedError}
+     * @throws {@link Schedulin.ForbiddenError}
+     * @throws {@link Schedulin.ConflictError}
+     * @throws {@link Schedulin.UnprocessableEntityError}
+     * @throws {@link Schedulin.TooManyRequestsError}
      * @throws {@link Schedulin.InternalServerError}
      * @throws {@link errors.SchedulinError}
      * @throws {@link errors.SchedulinTimeoutError}
@@ -42,14 +47,14 @@ export class AiClient {
     public generateImage(
         request: Schedulin.GenerateImageAiRequest,
         requestOptions?: AiClient.RequestOptions,
-    ): core.HttpResponsePromise<unknown> {
+    ): core.HttpResponsePromise<Schedulin.GenerateImageAiResponse> {
         return core.HttpResponsePromise.fromPromise(this.__generateImage(request, requestOptions));
     }
 
     private async __generateImage(
         request: Schedulin.GenerateImageAiRequest,
         requestOptions?: AiClient.RequestOptions,
-    ): Promise<core.WithRawResponse<unknown>> {
+    ): Promise<core.WithRawResponse<Schedulin.GenerateImageAiResponse>> {
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
         const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             _authRequest.headers,
@@ -76,14 +81,39 @@ export class AiClient {
             logging: this._options.logging,
         });
         if (_response.ok) {
-            return { data: _response.body, rawResponse: _response.rawResponse };
+            return { data: _response.body as Schedulin.GenerateImageAiResponse, rawResponse: _response.rawResponse };
         }
 
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
+                case 400:
+                    throw new Schedulin.BadRequestError(
+                        _response.error.body as Schedulin.ErrorResponse,
+                        _response.rawResponse,
+                    );
                 case 401:
                     throw new Schedulin.UnauthorizedError(
                         _response.error.body as Schedulin.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 403:
+                    throw new Schedulin.ForbiddenError(
+                        _response.error.body as Schedulin.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 409:
+                    throw new Schedulin.ConflictError(
+                        _response.error.body as Schedulin.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 422:
+                    throw new Schedulin.UnprocessableEntityError(
+                        _response.error.body as Schedulin.ValidationErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 429:
+                    throw new Schedulin.TooManyRequestsError(
+                        _response.error.body as Schedulin.RateLimitErrorResponse,
                         _response.rawResponse,
                     );
                 case 500:
@@ -109,7 +139,11 @@ export class AiClient {
      * @param {Schedulin.GetGenerationAiRequest} request
      * @param {AiClient.RequestOptions} requestOptions - Request-specific configuration.
      *
+     * @throws {@link Schedulin.BadRequestError}
      * @throws {@link Schedulin.UnauthorizedError}
+     * @throws {@link Schedulin.ForbiddenError}
+     * @throws {@link Schedulin.UnprocessableEntityError}
+     * @throws {@link Schedulin.TooManyRequestsError}
      * @throws {@link Schedulin.InternalServerError}
      * @throws {@link errors.SchedulinError}
      * @throws {@link errors.SchedulinTimeoutError}
@@ -122,14 +156,14 @@ export class AiClient {
     public getGeneration(
         request: Schedulin.GetGenerationAiRequest,
         requestOptions?: AiClient.RequestOptions,
-    ): core.HttpResponsePromise<unknown> {
+    ): core.HttpResponsePromise<Schedulin.AiGeneration> {
         return core.HttpResponsePromise.fromPromise(this.__getGeneration(request, requestOptions));
     }
 
     private async __getGeneration(
         request: Schedulin.GetGenerationAiRequest,
         requestOptions?: AiClient.RequestOptions,
-    ): Promise<core.WithRawResponse<unknown>> {
+    ): Promise<core.WithRawResponse<Schedulin.AiGeneration>> {
         const { id } = request;
         const _queryParams: Record<string, unknown> = {
             id,
@@ -161,14 +195,34 @@ export class AiClient {
             logging: this._options.logging,
         });
         if (_response.ok) {
-            return { data: _response.body, rawResponse: _response.rawResponse };
+            return { data: _response.body as Schedulin.AiGeneration, rawResponse: _response.rawResponse };
         }
 
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
+                case 400:
+                    throw new Schedulin.BadRequestError(
+                        _response.error.body as Schedulin.ErrorResponse,
+                        _response.rawResponse,
+                    );
                 case 401:
                     throw new Schedulin.UnauthorizedError(
                         _response.error.body as Schedulin.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 403:
+                    throw new Schedulin.ForbiddenError(
+                        _response.error.body as Schedulin.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 422:
+                    throw new Schedulin.UnprocessableEntityError(
+                        _response.error.body as Schedulin.ValidationErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 429:
+                    throw new Schedulin.TooManyRequestsError(
+                        _response.error.body as Schedulin.RateLimitErrorResponse,
                         _response.rawResponse,
                     );
                 case 500:

@@ -17,6 +17,9 @@ export interface Post {
     platformConfiguration: Record<string, unknown> | null;
     socialAccountId: string;
     url: string | null;
+    title: string | null;
+    postedAt: string | null;
+    errorMessage: string | null;
     createdAt: string;
     updatedAt: string;
 }

@@ -2,7 +2,7 @@
 
 export interface MediaUpdate {
     id: string;
-    url: string;
+    url?: string | undefined;
     mimeType?: string | undefined;
     width?: number | undefined;
     height?: number | undefined;

@@ -1,5 +1,6 @@
 export * from "./AnalyticsSeriesPostsResponse.js";
 export * from "./AnalyticsSummaryPostsResponse.js";
+export * from "./CountByTabPostsResponse.js";
 export * from "./CreatePostsResponse.js";
 export * from "./ListPostsRequestApprovalStatus.js";
 export * from "./ListPostsRequestStatus.js";

@@ -17,81 +17,13 @@ export interface PostWithRelations {
     platformConfiguration: Record<string, unknown> | null;
     socialAccountId: string;
     url: string | null;
+    title: string | null;
+    postedAt: string | null;
+    errorMessage: string | null;
     createdAt: string;
     updatedAt: string;
     socialAccount: Schedulin.SocialAccount;
-    media: PostWithRelations.Media.Item[];
+    media: Schedulin.PostMedia[];
+    thumbnail: Schedulin.PostMedia | null;
     tags: Schedulin.Tag[];
-}
-
-export namespace PostWithRelations {
-    export type Media = Media.Item[];
-
-    export namespace Media {
-        export interface Item {
-            url: string;
-            thumbnail_url?: (string | null) | undefined;
-            thumbnail_timestamp_ms?: (number | null) | undefined;
-            tags?: Item.Tags.Item[] | undefined;
-            alt?: (string | null) | undefined;
-            skip_processing?: boolean | undefined;
-        }
-
-        export namespace Item {
-            export type Tags = Tags.Item[];
-
-            export namespace Tags {
-                export interface Item {
-                    id: string;
-                    type: Item.Type;
-                    platform: Item.Platform;
-                    x?: number | undefined;
-                    y?: number | undefined;
-                }
-
-                export namespace Item {
-                    export const Type = {
-                        User: "user",
-                        Business: "business",
-                    } as const;
-                    export type Type = (typeof Type)[keyof typeof Type];
-                    export const Platform = {
-                        Bluesky: "bluesky",
-                        Facebook: "facebook",
-                        GoogleBusinessProfile: "google_business_profile",
-                        Instagram: "instagram",
-                        Linkedin: "linkedin",
-                        Pinterest: "pinterest",
-                        Reddit: "reddit",
-                        Snapchat: "snapchat",
-                        Threads: "threads",
-                        Tiktok: "tiktok",
-                        Twitter: "twitter",
-                        Youtube: "youtube",
-                        Mastodon: "mastodon",
-                        Telegram: "telegram",
-                        Devto: "devto",
-                        Hashnode: "hashnode",
-                        Medium: "medium",
-                        Wordpress: "wordpress",
-                        Lemmy: "lemmy",
-                        Nostr: "nostr",
-                        Discord: "discord",
-                        Dribbble: "dribbble",
-                        Farcaster: "farcaster",
-                        Kick: "kick",
-                        Listmonk: "listmonk",
-                        Mewe: "mewe",
-                        Moltbook: "moltbook",
-                        Skool: "skool",
-                        Slack: "slack",
-                        Twitch: "twitch",
-                        Vk: "vk",
-                        Whop: "whop",
-                    } as const;
-                    export type Platform = (typeof Platform)[keyof typeof Platform];
-                }
-            }
-        }
-    }
 }

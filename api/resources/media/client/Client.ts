@@ -29,7 +29,12 @@ export class MediaClient {
      * @param {Schedulin.CreateFromUrlMediaRequest} request
      * @param {MediaClient.RequestOptions} requestOptions - Request-specific configuration.
      *
+     * @throws {@link Schedulin.BadRequestError}
      * @throws {@link Schedulin.UnauthorizedError}
+     * @throws {@link Schedulin.ForbiddenError}
+     * @throws {@link Schedulin.ConflictError}
+     * @throws {@link Schedulin.UnprocessableEntityError}
+     * @throws {@link Schedulin.TooManyRequestsError}
      * @throws {@link Schedulin.InternalServerError}
      * @throws {@link errors.SchedulinError}
      * @throws {@link errors.SchedulinTimeoutError}
@@ -42,14 +47,14 @@ export class MediaClient {
     public createFromUrl(
         request: Schedulin.CreateFromUrlMediaRequest,
         requestOptions?: MediaClient.RequestOptions,
-    ): core.HttpResponsePromise<unknown> {
+    ): core.HttpResponsePromise<Schedulin.Media> {
         return core.HttpResponsePromise.fromPromise(this.__createFromUrl(request, requestOptions));
     }
 
     private async __createFromUrl(
         request: Schedulin.CreateFromUrlMediaRequest,
         requestOptions?: MediaClient.RequestOptions,
-    ): Promise<core.WithRawResponse<unknown>> {
+    ): Promise<core.WithRawResponse<Schedulin.Media>> {
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
         const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             _authRequest.headers,
@@ -76,14 +81,39 @@ export class MediaClient {
             logging: this._options.logging,
         });
         if (_response.ok) {
-            return { data: _response.body, rawResponse: _response.rawResponse };
+            return { data: _response.body as Schedulin.Media, rawResponse: _response.rawResponse };
         }
 
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
+                case 400:
+                    throw new Schedulin.BadRequestError(
+                        _response.error.body as Schedulin.ErrorResponse,
+                        _response.rawResponse,
+                    );
                 case 401:
                     throw new Schedulin.UnauthorizedError(
                         _response.error.body as Schedulin.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 403:
+                    throw new Schedulin.ForbiddenError(
+                        _response.error.body as Schedulin.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 409:
+                    throw new Schedulin.ConflictError(
+                        _response.error.body as Schedulin.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 422:
+                    throw new Schedulin.UnprocessableEntityError(
+                        _response.error.body as Schedulin.ValidationErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 429:
+                    throw new Schedulin.TooManyRequestsError(
+                        _response.error.body as Schedulin.RateLimitErrorResponse,
                         _response.rawResponse,
                     );
                 case 500:
@@ -109,7 +139,12 @@ export class MediaClient {
      * @param {Schedulin.CreateUploadLinkMediaRequest} request
      * @param {MediaClient.RequestOptions} requestOptions - Request-specific configuration.
      *
+     * @throws {@link Schedulin.BadRequestError}
      * @throws {@link Schedulin.UnauthorizedError}
+     * @throws {@link Schedulin.ForbiddenError}
+     * @throws {@link Schedulin.ConflictError}
+     * @throws {@link Schedulin.UnprocessableEntityError}
+     * @throws {@link Schedulin.TooManyRequestsError}
      * @throws {@link Schedulin.InternalServerError}
      * @throws {@link errors.SchedulinError}
      * @throws {@link errors.SchedulinTimeoutError}
@@ -120,14 +155,14 @@ export class MediaClient {
     public createUploadLink(
         request: Schedulin.CreateUploadLinkMediaRequest = {},
         requestOptions?: MediaClient.RequestOptions,
-    ): core.HttpResponsePromise<unknown> {
+    ): core.HttpResponsePromise<Schedulin.CreateUploadLinkMediaResponse> {
         return core.HttpResponsePromise.fromPromise(this.__createUploadLink(request, requestOptions));
     }
 
     private async __createUploadLink(
         request: Schedulin.CreateUploadLinkMediaRequest = {},
         requestOptions?: MediaClient.RequestOptions,
-    ): Promise<core.WithRawResponse<unknown>> {
+    ): Promise<core.WithRawResponse<Schedulin.CreateUploadLinkMediaResponse>> {
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
         const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             _authRequest.headers,
@@ -154,14 +189,42 @@ export class MediaClient {
             logging: this._options.logging,
         });
         if (_response.ok) {
-            return { data: _response.body, rawResponse: _response.rawResponse };
+            return {
+                data: _response.body as Schedulin.CreateUploadLinkMediaResponse,
+                rawResponse: _response.rawResponse,
+            };
         }
 
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
+                case 400:
+                    throw new Schedulin.BadRequestError(
+                        _response.error.body as Schedulin.ErrorResponse,
+                        _response.rawResponse,
+                    );
                 case 401:
                     throw new Schedulin.UnauthorizedError(
                         _response.error.body as Schedulin.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 403:
+                    throw new Schedulin.ForbiddenError(
+                        _response.error.body as Schedulin.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 409:
+                    throw new Schedulin.ConflictError(
+                        _response.error.body as Schedulin.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 422:
+                    throw new Schedulin.UnprocessableEntityError(
+                        _response.error.body as Schedulin.ValidationErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 429:
+                    throw new Schedulin.TooManyRequestsError(
+                        _response.error.body as Schedulin.RateLimitErrorResponse,
                         _response.rawResponse,
                     );
                 case 500:
@@ -187,7 +250,12 @@ export class MediaClient {
      * @param {Schedulin.UploadMediaRequest} request
      * @param {MediaClient.RequestOptions} requestOptions - Request-specific configuration.
      *
+     * @throws {@link Schedulin.BadRequestError}
      * @throws {@link Schedulin.UnauthorizedError}
+     * @throws {@link Schedulin.ForbiddenError}
+     * @throws {@link Schedulin.ConflictError}
+     * @throws {@link Schedulin.UnprocessableEntityError}
+     * @throws {@link Schedulin.TooManyRequestsError}
      * @throws {@link Schedulin.InternalServerError}
      * @throws {@link errors.SchedulinError}
      * @throws {@link errors.SchedulinTimeoutError}
@@ -201,14 +269,14 @@ export class MediaClient {
     public upload(
         request: Schedulin.UploadMediaRequest,
         requestOptions?: MediaClient.RequestOptions,
-    ): core.HttpResponsePromise<unknown> {
+    ): core.HttpResponsePromise<Schedulin.Media> {
         return core.HttpResponsePromise.fromPromise(this.__upload(request, requestOptions));
     }
 
     private async __upload(
         request: Schedulin.UploadMediaRequest,
         requestOptions?: MediaClient.RequestOptions,
-    ): Promise<core.WithRawResponse<unknown>> {
+    ): Promise<core.WithRawResponse<Schedulin.Media>> {
         const _body = await core.newFormData();
         await _body.appendFile("file", request.file);
         if (request.name != null) {
@@ -251,14 +319,39 @@ export class MediaClient {
             logging: this._options.logging,
         });
         if (_response.ok) {
-            return { data: _response.body, rawResponse: _response.rawResponse };
+            return { data: _response.body as Schedulin.Media, rawResponse: _response.rawResponse };
         }
 
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
+                case 400:
+                    throw new Schedulin.BadRequestError(
+                        _response.error.body as Schedulin.ErrorResponse,
+                        _response.rawResponse,
+                    );
                 case 401:
                     throw new Schedulin.UnauthorizedError(
                         _response.error.body as Schedulin.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 403:
+                    throw new Schedulin.ForbiddenError(
+                        _response.error.body as Schedulin.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 409:
+                    throw new Schedulin.ConflictError(
+                        _response.error.body as Schedulin.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 422:
+                    throw new Schedulin.UnprocessableEntityError(
+                        _response.error.body as Schedulin.ValidationErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 429:
+                    throw new Schedulin.TooManyRequestsError(
+                        _response.error.body as Schedulin.RateLimitErrorResponse,
                         _response.rawResponse,
                     );
                 case 500:
@@ -284,7 +377,12 @@ export class MediaClient {
      * @param {Schedulin.RetrieveMediaRequest} request
      * @param {MediaClient.RequestOptions} requestOptions - Request-specific configuration.
      *
+     * @throws {@link Schedulin.BadRequestError}
      * @throws {@link Schedulin.UnauthorizedError}
+     * @throws {@link Schedulin.ForbiddenError}
+     * @throws {@link Schedulin.NotFoundError}
+     * @throws {@link Schedulin.UnprocessableEntityError}
+     * @throws {@link Schedulin.TooManyRequestsError}
      * @throws {@link Schedulin.InternalServerError}
      * @throws {@link errors.SchedulinError}
      * @throws {@link errors.SchedulinTimeoutError}
@@ -297,14 +395,14 @@ export class MediaClient {
     public retrieve(
         request: Schedulin.RetrieveMediaRequest,
         requestOptions?: MediaClient.RequestOptions,
-    ): core.HttpResponsePromise<Schedulin.Media | null> {
+    ): core.HttpResponsePromise<Schedulin.Media> {
         return core.HttpResponsePromise.fromPromise(this.__retrieve(request, requestOptions));
     }
 
     private async __retrieve(
         request: Schedulin.RetrieveMediaRequest,
         requestOptions?: MediaClient.RequestOptions,
-    ): Promise<core.WithRawResponse<Schedulin.Media | null>> {
+    ): Promise<core.WithRawResponse<Schedulin.Media>> {
         const { id } = request;
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
         const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
@@ -329,14 +427,39 @@ export class MediaClient {
             logging: this._options.logging,
         });
         if (_response.ok) {
-            return { data: _response.body as Schedulin.Media | null, rawResponse: _response.rawResponse };
+            return { data: _response.body as Schedulin.Media, rawResponse: _response.rawResponse };
         }
 
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
+                case 400:
+                    throw new Schedulin.BadRequestError(
+                        _response.error.body as Schedulin.ErrorResponse,
+                        _response.rawResponse,
+                    );
                 case 401:
                     throw new Schedulin.UnauthorizedError(
                         _response.error.body as Schedulin.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 403:
+                    throw new Schedulin.ForbiddenError(
+                        _response.error.body as Schedulin.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 404:
+                    throw new Schedulin.NotFoundError(
+                        _response.error.body as Schedulin.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 422:
+                    throw new Schedulin.UnprocessableEntityError(
+                        _response.error.body as Schedulin.ValidationErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 429:
+                    throw new Schedulin.TooManyRequestsError(
+                        _response.error.body as Schedulin.RateLimitErrorResponse,
                         _response.rawResponse,
                     );
                 case 500:
@@ -362,15 +485,20 @@ export class MediaClient {
      * @param {Schedulin.UpdateMediaRequest} request
      * @param {MediaClient.RequestOptions} requestOptions - Request-specific configuration.
      *
+     * @throws {@link Schedulin.BadRequestError}
      * @throws {@link Schedulin.UnauthorizedError}
+     * @throws {@link Schedulin.ForbiddenError}
+     * @throws {@link Schedulin.NotFoundError}
+     * @throws {@link Schedulin.ConflictError}
+     * @throws {@link Schedulin.UnprocessableEntityError}
+     * @throws {@link Schedulin.TooManyRequestsError}
      * @throws {@link Schedulin.InternalServerError}
      * @throws {@link errors.SchedulinError}
      * @throws {@link errors.SchedulinTimeoutError}
      *
      * @example
      *     await client.media.update({
-     *         id: "id",
-     *         url: "url"
+     *         id: "id"
      *     })
      */
     public update(
@@ -416,9 +544,39 @@ export class MediaClient {
 
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
+                case 400:
+                    throw new Schedulin.BadRequestError(
+                        _response.error.body as Schedulin.ErrorResponse,
+                        _response.rawResponse,
+                    );
                 case 401:
                     throw new Schedulin.UnauthorizedError(
                         _response.error.body as Schedulin.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 403:
+                    throw new Schedulin.ForbiddenError(
+                        _response.error.body as Schedulin.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 404:
+                    throw new Schedulin.NotFoundError(
+                        _response.error.body as Schedulin.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 409:
+                    throw new Schedulin.ConflictError(
+                        _response.error.body as Schedulin.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 422:
+                    throw new Schedulin.UnprocessableEntityError(
+                        _response.error.body as Schedulin.ValidationErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 429:
+                    throw new Schedulin.TooManyRequestsError(
+                        _response.error.body as Schedulin.RateLimitErrorResponse,
                         _response.rawResponse,
                     );
                 case 500:
@@ -444,7 +602,13 @@ export class MediaClient {
      * @param {Schedulin.DeleteMediaRequest} request
      * @param {MediaClient.RequestOptions} requestOptions - Request-specific configuration.
      *
+     * @throws {@link Schedulin.BadRequestError}
      * @throws {@link Schedulin.UnauthorizedError}
+     * @throws {@link Schedulin.ForbiddenError}
+     * @throws {@link Schedulin.NotFoundError}
+     * @throws {@link Schedulin.ConflictError}
+     * @throws {@link Schedulin.UnprocessableEntityError}
+     * @throws {@link Schedulin.TooManyRequestsError}
      * @throws {@link Schedulin.InternalServerError}
      * @throws {@link errors.SchedulinError}
      * @throws {@link errors.SchedulinTimeoutError}
@@ -457,14 +621,14 @@ export class MediaClient {
     public delete(
         request: Schedulin.DeleteMediaRequest,
         requestOptions?: MediaClient.RequestOptions,
-    ): core.HttpResponsePromise<unknown> {
+    ): core.HttpResponsePromise<Schedulin.DeleteMediaResponse> {
         return core.HttpResponsePromise.fromPromise(this.__delete(request, requestOptions));
     }
 
     private async __delete(
         request: Schedulin.DeleteMediaRequest,
         requestOptions?: MediaClient.RequestOptions,
-    ): Promise<core.WithRawResponse<unknown>> {
+    ): Promise<core.WithRawResponse<Schedulin.DeleteMediaResponse>> {
         const { id, ..._body } = request;
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
         const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
@@ -492,14 +656,44 @@ export class MediaClient {
             logging: this._options.logging,
         });
         if (_response.ok) {
-            return { data: _response.body, rawResponse: _response.rawResponse };
+            return { data: _response.body as Schedulin.DeleteMediaResponse, rawResponse: _response.rawResponse };
         }
 
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
+                case 400:
+                    throw new Schedulin.BadRequestError(
+                        _response.error.body as Schedulin.ErrorResponse,
+                        _response.rawResponse,
+                    );
                 case 401:
                     throw new Schedulin.UnauthorizedError(
                         _response.error.body as Schedulin.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 403:
+                    throw new Schedulin.ForbiddenError(
+                        _response.error.body as Schedulin.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 404:
+                    throw new Schedulin.NotFoundError(
+                        _response.error.body as Schedulin.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 409:
+                    throw new Schedulin.ConflictError(
+                        _response.error.body as Schedulin.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 422:
+                    throw new Schedulin.UnprocessableEntityError(
+                        _response.error.body as Schedulin.ValidationErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 429:
+                    throw new Schedulin.TooManyRequestsError(
+                        _response.error.body as Schedulin.RateLimitErrorResponse,
                         _response.rawResponse,
                     );
                 case 500:
@@ -525,7 +719,11 @@ export class MediaClient {
      * @param {Schedulin.ListMediaRequest} request
      * @param {MediaClient.RequestOptions} requestOptions - Request-specific configuration.
      *
+     * @throws {@link Schedulin.BadRequestError}
      * @throws {@link Schedulin.UnauthorizedError}
+     * @throws {@link Schedulin.ForbiddenError}
+     * @throws {@link Schedulin.UnprocessableEntityError}
+     * @throws {@link Schedulin.TooManyRequestsError}
      * @throws {@link Schedulin.InternalServerError}
      * @throws {@link errors.SchedulinError}
      * @throws {@link errors.SchedulinTimeoutError}
@@ -585,9 +783,29 @@ export class MediaClient {
 
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
+                case 400:
+                    throw new Schedulin.BadRequestError(
+                        _response.error.body as Schedulin.ErrorResponse,
+                        _response.rawResponse,
+                    );
                 case 401:
                     throw new Schedulin.UnauthorizedError(
                         _response.error.body as Schedulin.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 403:
+                    throw new Schedulin.ForbiddenError(
+                        _response.error.body as Schedulin.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 422:
+                    throw new Schedulin.UnprocessableEntityError(
+                        _response.error.body as Schedulin.ValidationErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 429:
+                    throw new Schedulin.TooManyRequestsError(
+                        _response.error.body as Schedulin.RateLimitErrorResponse,
                         _response.rawResponse,
                     );
                 case 500:
@@ -613,7 +831,13 @@ export class MediaClient {
      * @param {Schedulin.SetTagsMediaRequest} request
      * @param {MediaClient.RequestOptions} requestOptions - Request-specific configuration.
      *
+     * @throws {@link Schedulin.BadRequestError}
      * @throws {@link Schedulin.UnauthorizedError}
+     * @throws {@link Schedulin.ForbiddenError}
+     * @throws {@link Schedulin.NotFoundError}
+     * @throws {@link Schedulin.ConflictError}
+     * @throws {@link Schedulin.UnprocessableEntityError}
+     * @throws {@link Schedulin.TooManyRequestsError}
      * @throws {@link Schedulin.InternalServerError}
      * @throws {@link errors.SchedulinError}
      * @throws {@link errors.SchedulinTimeoutError}
@@ -627,14 +851,14 @@ export class MediaClient {
     public setTags(
         request: Schedulin.SetTagsMediaRequest,
         requestOptions?: MediaClient.RequestOptions,
-    ): core.HttpResponsePromise<unknown> {
+    ): core.HttpResponsePromise<Schedulin.SetTagsMediaResponse> {
         return core.HttpResponsePromise.fromPromise(this.__setTags(request, requestOptions));
     }
 
     private async __setTags(
         request: Schedulin.SetTagsMediaRequest,
         requestOptions?: MediaClient.RequestOptions,
-    ): Promise<core.WithRawResponse<unknown>> {
+    ): Promise<core.WithRawResponse<Schedulin.SetTagsMediaResponse>> {
         const { mediaId, ..._body } = request;
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
         const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
@@ -662,14 +886,44 @@ export class MediaClient {
             logging: this._options.logging,
         });
         if (_response.ok) {
-            return { data: _response.body, rawResponse: _response.rawResponse };
+            return { data: _response.body as Schedulin.SetTagsMediaResponse, rawResponse: _response.rawResponse };
         }
 
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
+                case 400:
+                    throw new Schedulin.BadRequestError(
+                        _response.error.body as Schedulin.ErrorResponse,
+                        _response.rawResponse,
+                    );
                 case 401:
                     throw new Schedulin.UnauthorizedError(
                         _response.error.body as Schedulin.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 403:
+                    throw new Schedulin.ForbiddenError(
+                        _response.error.body as Schedulin.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 404:
+                    throw new Schedulin.NotFoundError(
+                        _response.error.body as Schedulin.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 409:
+                    throw new Schedulin.ConflictError(
+                        _response.error.body as Schedulin.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 422:
+                    throw new Schedulin.UnprocessableEntityError(
+                        _response.error.body as Schedulin.ValidationErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 429:
+                    throw new Schedulin.TooManyRequestsError(
+                        _response.error.body as Schedulin.RateLimitErrorResponse,
                         _response.rawResponse,
                     );
                 case 500:
@@ -694,7 +948,11 @@ export class MediaClient {
      *
      * @param {MediaClient.RequestOptions} requestOptions - Request-specific configuration.
      *
+     * @throws {@link Schedulin.BadRequestError}
      * @throws {@link Schedulin.UnauthorizedError}
+     * @throws {@link Schedulin.ForbiddenError}
+     * @throws {@link Schedulin.UnprocessableEntityError}
+     * @throws {@link Schedulin.TooManyRequestsError}
      * @throws {@link Schedulin.InternalServerError}
      * @throws {@link errors.SchedulinError}
      * @throws {@link errors.SchedulinTimeoutError}
@@ -739,9 +997,29 @@ export class MediaClient {
 
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
+                case 400:
+                    throw new Schedulin.BadRequestError(
+                        _response.error.body as Schedulin.ErrorResponse,
+                        _response.rawResponse,
+                    );
                 case 401:
                     throw new Schedulin.UnauthorizedError(
                         _response.error.body as Schedulin.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 403:
+                    throw new Schedulin.ForbiddenError(
+                        _response.error.body as Schedulin.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 422:
+                    throw new Schedulin.UnprocessableEntityError(
+                        _response.error.body as Schedulin.ValidationErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 429:
+                    throw new Schedulin.TooManyRequestsError(
+                        _response.error.body as Schedulin.RateLimitErrorResponse,
                         _response.rawResponse,
                     );
                 case 500:
@@ -767,7 +1045,12 @@ export class MediaClient {
      * @param {Schedulin.CreatePresignedPost} request
      * @param {MediaClient.RequestOptions} requestOptions - Request-specific configuration.
      *
+     * @throws {@link Schedulin.BadRequestError}
      * @throws {@link Schedulin.UnauthorizedError}
+     * @throws {@link Schedulin.ForbiddenError}
+     * @throws {@link Schedulin.ConflictError}
+     * @throws {@link Schedulin.UnprocessableEntityError}
+     * @throws {@link Schedulin.TooManyRequestsError}
      * @throws {@link Schedulin.InternalServerError}
      * @throws {@link errors.SchedulinError}
      * @throws {@link errors.SchedulinTimeoutError}
@@ -820,9 +1103,34 @@ export class MediaClient {
 
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
+                case 400:
+                    throw new Schedulin.BadRequestError(
+                        _response.error.body as Schedulin.ErrorResponse,
+                        _response.rawResponse,
+                    );
                 case 401:
                     throw new Schedulin.UnauthorizedError(
                         _response.error.body as Schedulin.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 403:
+                    throw new Schedulin.ForbiddenError(
+                        _response.error.body as Schedulin.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 409:
+                    throw new Schedulin.ConflictError(
+                        _response.error.body as Schedulin.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 422:
+                    throw new Schedulin.UnprocessableEntityError(
+                        _response.error.body as Schedulin.ValidationErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 429:
+                    throw new Schedulin.TooManyRequestsError(
+                        _response.error.body as Schedulin.RateLimitErrorResponse,
                         _response.rawResponse,
                     );
                 case 500:
