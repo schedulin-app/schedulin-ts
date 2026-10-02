@@ -2,5 +2,5 @@
 
 export interface DeleteMediaResponse {
     id: string;
-    deleted: string;
+    deleted: boolean;
 }

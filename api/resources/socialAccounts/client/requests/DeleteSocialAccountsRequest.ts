@@ -8,4 +8,5 @@
  */
 export interface DeleteSocialAccountsRequest {
     id: string;
+    permanent?: boolean;
 }

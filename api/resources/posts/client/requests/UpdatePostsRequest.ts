@@ -21,12 +21,17 @@ export namespace UpdatePostsRequest {
 
     export namespace Media {
         export interface Item {
-            id: string;
-            name: string;
-            url: string;
-            mimeType: string;
+            id?: string | undefined;
+            url?: string | undefined;
+            name?: string | undefined;
+            mimeType?: string | undefined;
+            width?: (number | null) | undefined;
+            height?: (number | null) | undefined;
+            size?: (number | null) | undefined;
+            duration?: (number | null) | undefined;
+            alt?: (string | null) | undefined;
             bucket?: string | undefined;
-            key: string;
+            key?: string | undefined;
         }
     }
 

@@ -142,6 +142,7 @@ export class AiClient {
      * @throws {@link Schedulin.BadRequestError}
      * @throws {@link Schedulin.UnauthorizedError}
      * @throws {@link Schedulin.ForbiddenError}
+     * @throws {@link Schedulin.NotFoundError}
      * @throws {@link Schedulin.UnprocessableEntityError}
      * @throws {@link Schedulin.TooManyRequestsError}
      * @throws {@link Schedulin.InternalServerError}
@@ -212,6 +213,11 @@ export class AiClient {
                     );
                 case 403:
                     throw new Schedulin.ForbiddenError(
+                        _response.error.body as Schedulin.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 404:
+                    throw new Schedulin.NotFoundError(
                         _response.error.body as Schedulin.ErrorResponse,
                         _response.rawResponse,
                     );
