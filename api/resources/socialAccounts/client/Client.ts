@@ -712,7 +712,7 @@ export class SocialAccountsClient {
     }
 
     /**
-     * Remove a connected social media account
+     * Remove a connected social media account. This permanently deletes ALL of the account's posts (scheduled, drafts and published history) and cannot be undone. To keep history, reconnect the account instead of deleting it.
      *
      * @param {Schedulin.DeleteSocialAccountsRequest} request
      * @param {SocialAccountsClient.RequestOptions} requestOptions - Request-specific configuration.
