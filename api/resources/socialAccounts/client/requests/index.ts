@@ -1,4 +1,6 @@
 export type { DeleteSocialAccountsRequest } from "./DeleteSocialAccountsRequest.js";
+export type { ListDiscordChannelsSocialAccountsRequest } from "./ListDiscordChannelsSocialAccountsRequest.js";
+export type { ListSlackChannelsSocialAccountsRequest } from "./ListSlackChannelsSocialAccountsRequest.js";
 export type { ListWhopCompaniesSocialAccountsRequest } from "./ListWhopCompaniesSocialAccountsRequest.js";
 export type { ListWhopForumsSocialAccountsRequest } from "./ListWhopForumsSocialAccountsRequest.js";
 export type { NextSlotsSocialAccountsRequest } from "./NextSlotsSocialAccountsRequest.js";

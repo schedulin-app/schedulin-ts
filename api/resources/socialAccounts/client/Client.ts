@@ -276,6 +276,178 @@ export class SocialAccountsClient {
     }
 
     /**
+     * List the text and announcement channels the Schedulin bot can post into for a connected Discord server. Use an item id as `platformConfiguration.channel` when creating a Discord post.
+     *
+     * @param {Schedulin.ListDiscordChannelsSocialAccountsRequest} request
+     * @param {SocialAccountsClient.RequestOptions} requestOptions - Request-specific configuration.
+     *
+     * @throws {@link Schedulin.UnauthorizedError}
+     * @throws {@link Schedulin.InternalServerError}
+     * @throws {@link errors.SchedulinError}
+     * @throws {@link errors.SchedulinTimeoutError}
+     *
+     * @example
+     *     await client.socialAccounts.listDiscordChannels({
+     *         id: "id"
+     *     })
+     */
+    public listDiscordChannels(
+        request: Schedulin.ListDiscordChannelsSocialAccountsRequest,
+        requestOptions?: SocialAccountsClient.RequestOptions,
+    ): core.HttpResponsePromise<Schedulin.ListDiscordChannelsSocialAccountsResponse> {
+        return core.HttpResponsePromise.fromPromise(this.__listDiscordChannels(request, requestOptions));
+    }
+
+    private async __listDiscordChannels(
+        request: Schedulin.ListDiscordChannelsSocialAccountsRequest,
+        requestOptions?: SocialAccountsClient.RequestOptions,
+    ): Promise<core.WithRawResponse<Schedulin.ListDiscordChannelsSocialAccountsResponse>> {
+        const { id } = request;
+        const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
+        const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            _authRequest.headers,
+            this._options?.headers,
+            requestOptions?.headers,
+        );
+        const _response = await core.fetcher({
+            url: core.url.join(
+                (await core.Supplier.get(this._options.baseUrl)) ??
+                    (await core.Supplier.get(this._options.environment)) ??
+                    environments.SchedulinEnvironment.Default,
+                `v0/social-accounts/${core.url.encodePathParam(id)}/discord-channels`,
+            ),
+            method: "GET",
+            headers: _headers,
+            queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
+            timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
+            maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
+            abortSignal: requestOptions?.abortSignal,
+            fetchFn: this._options?.fetch,
+            logging: this._options.logging,
+        });
+        if (_response.ok) {
+            return {
+                data: _response.body as Schedulin.ListDiscordChannelsSocialAccountsResponse,
+                rawResponse: _response.rawResponse,
+            };
+        }
+
+        if (_response.error.reason === "status-code") {
+            switch (_response.error.statusCode) {
+                case 401:
+                    throw new Schedulin.UnauthorizedError(
+                        _response.error.body as Schedulin.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 500:
+                    throw new Schedulin.InternalServerError(
+                        _response.error.body as Schedulin.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                default:
+                    throw new errors.SchedulinError({
+                        statusCode: _response.error.statusCode,
+                        body: _response.error.body,
+                        rawResponse: _response.rawResponse,
+                    });
+            }
+        }
+
+        return handleNonStatusCodeError(
+            _response.error,
+            _response.rawResponse,
+            "GET",
+            "/v0/social-accounts/{id}/discord-channels",
+        );
+    }
+
+    /**
+     * List the channels in a connected Slack workspace that the Schedulin bot can post into (public channels, plus private channels it was invited to). Use an item id as `platformConfiguration.channel` when creating a Slack post.
+     *
+     * @param {Schedulin.ListSlackChannelsSocialAccountsRequest} request
+     * @param {SocialAccountsClient.RequestOptions} requestOptions - Request-specific configuration.
+     *
+     * @throws {@link Schedulin.UnauthorizedError}
+     * @throws {@link Schedulin.InternalServerError}
+     * @throws {@link errors.SchedulinError}
+     * @throws {@link errors.SchedulinTimeoutError}
+     *
+     * @example
+     *     await client.socialAccounts.listSlackChannels({
+     *         id: "id"
+     *     })
+     */
+    public listSlackChannels(
+        request: Schedulin.ListSlackChannelsSocialAccountsRequest,
+        requestOptions?: SocialAccountsClient.RequestOptions,
+    ): core.HttpResponsePromise<Schedulin.ListSlackChannelsSocialAccountsResponse> {
+        return core.HttpResponsePromise.fromPromise(this.__listSlackChannels(request, requestOptions));
+    }
+
+    private async __listSlackChannels(
+        request: Schedulin.ListSlackChannelsSocialAccountsRequest,
+        requestOptions?: SocialAccountsClient.RequestOptions,
+    ): Promise<core.WithRawResponse<Schedulin.ListSlackChannelsSocialAccountsResponse>> {
+        const { id } = request;
+        const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
+        const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            _authRequest.headers,
+            this._options?.headers,
+            requestOptions?.headers,
+        );
+        const _response = await core.fetcher({
+            url: core.url.join(
+                (await core.Supplier.get(this._options.baseUrl)) ??
+                    (await core.Supplier.get(this._options.environment)) ??
+                    environments.SchedulinEnvironment.Default,
+                `v0/social-accounts/${core.url.encodePathParam(id)}/slack-channels`,
+            ),
+            method: "GET",
+            headers: _headers,
+            queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
+            timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
+            maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
+            abortSignal: requestOptions?.abortSignal,
+            fetchFn: this._options?.fetch,
+            logging: this._options.logging,
+        });
+        if (_response.ok) {
+            return {
+                data: _response.body as Schedulin.ListSlackChannelsSocialAccountsResponse,
+                rawResponse: _response.rawResponse,
+            };
+        }
+
+        if (_response.error.reason === "status-code") {
+            switch (_response.error.statusCode) {
+                case 401:
+                    throw new Schedulin.UnauthorizedError(
+                        _response.error.body as Schedulin.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 500:
+                    throw new Schedulin.InternalServerError(
+                        _response.error.body as Schedulin.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                default:
+                    throw new errors.SchedulinError({
+                        statusCode: _response.error.statusCode,
+                        body: _response.error.body,
+                        rawResponse: _response.rawResponse,
+                    });
+            }
+        }
+
+        return handleNonStatusCodeError(
+            _response.error,
+            _response.rawResponse,
+            "GET",
+            "/v0/social-accounts/{id}/slack-channels",
+        );
+    }
+
+    /**
      * Update social media account settings and information
      *
      * @param {Schedulin.UpdateSocialAccountsRequest} request

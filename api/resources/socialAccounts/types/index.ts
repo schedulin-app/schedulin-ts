@@ -1,4 +1,6 @@
 export * from "./DeleteSocialAccountsResponse.js";
+export * from "./ListDiscordChannelsSocialAccountsResponse.js";
+export * from "./ListSlackChannelsSocialAccountsResponse.js";
 export * from "./ListSocialAccountsResponse.js";
 export * from "./ListWhopCompaniesSocialAccountsResponse.js";
 export * from "./ListWhopForumsSocialAccountsResponse.js";
