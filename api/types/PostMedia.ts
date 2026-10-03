@@ -11,6 +11,64 @@ export interface PostMedia {
     size: number | null;
     alt: string | null;
     thumbnailUrl: string | null;
+    tags?: PostMedia.Tags.Item[] | undefined;
     createdAt: string;
     updatedAt: string;
+}
+
+export namespace PostMedia {
+    export type Tags = Tags.Item[];
+
+    export namespace Tags {
+        export interface Item {
+            id: string;
+            type: Item.Type;
+            platform: Item.Platform;
+            x?: number | undefined;
+            y?: number | undefined;
+        }
+
+        export namespace Item {
+            export const Type = {
+                User: "user",
+                Business: "business",
+            } as const;
+            export type Type = (typeof Type)[keyof typeof Type];
+            export const Platform = {
+                Bluesky: "bluesky",
+                Facebook: "facebook",
+                GoogleBusinessProfile: "google_business_profile",
+                Instagram: "instagram",
+                Linkedin: "linkedin",
+                Pinterest: "pinterest",
+                Reddit: "reddit",
+                Snapchat: "snapchat",
+                Threads: "threads",
+                Tiktok: "tiktok",
+                Twitter: "twitter",
+                Youtube: "youtube",
+                Mastodon: "mastodon",
+                Telegram: "telegram",
+                Devto: "devto",
+                Hashnode: "hashnode",
+                Medium: "medium",
+                Wordpress: "wordpress",
+                Lemmy: "lemmy",
+                Nostr: "nostr",
+                Discord: "discord",
+                Dribbble: "dribbble",
+                Farcaster: "farcaster",
+                Kick: "kick",
+                Listmonk: "listmonk",
+                Mewe: "mewe",
+                Moltbook: "moltbook",
+                Skool: "skool",
+                Slack: "slack",
+                Twitch: "twitch",
+                Vk: "vk",
+                Whop: "whop",
+            } as const;
+            export type Platform = (typeof Platform)[keyof typeof Platform];
+        }
+    }
 }
