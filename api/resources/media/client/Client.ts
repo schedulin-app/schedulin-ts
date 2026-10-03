@@ -134,6 +134,122 @@ export class MediaClient {
     }
 
     /**
+     * Adds a file you uploaded with POST /v0/media/presign (intent `post`) + HTTP PUT to the media library in place — no second copy is stored — and returns the media record. Pass the presign `key`. The object's type and size are read from storage and must be an allowed image/video/audio type within the post upload limit (250 MB). Idempotent: registering the same key again returns the existing record. Returns 404 when no uploaded object exists for the key in your workspace.
+     *
+     * @param {Schedulin.MediaRegister} request
+     * @param {MediaClient.RequestOptions} requestOptions - Request-specific configuration.
+     *
+     * @throws {@link Schedulin.BadRequestError}
+     * @throws {@link Schedulin.UnauthorizedError}
+     * @throws {@link Schedulin.ForbiddenError}
+     * @throws {@link Schedulin.NotFoundError}
+     * @throws {@link Schedulin.ConflictError}
+     * @throws {@link Schedulin.UnprocessableEntityError}
+     * @throws {@link Schedulin.TooManyRequestsError}
+     * @throws {@link Schedulin.InternalServerError}
+     * @throws {@link errors.SchedulinError}
+     * @throws {@link errors.SchedulinTimeoutError}
+     *
+     * @example
+     *     await client.media.register({
+     *         key: "key"
+     *     })
+     */
+    public register(
+        request: Schedulin.MediaRegister,
+        requestOptions?: MediaClient.RequestOptions,
+    ): core.HttpResponsePromise<Schedulin.Media> {
+        return core.HttpResponsePromise.fromPromise(this.__register(request, requestOptions));
+    }
+
+    private async __register(
+        request: Schedulin.MediaRegister,
+        requestOptions?: MediaClient.RequestOptions,
+    ): Promise<core.WithRawResponse<Schedulin.Media>> {
+        const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
+        const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            _authRequest.headers,
+            this._options?.headers,
+            requestOptions?.headers,
+        );
+        const _response = await core.fetcher({
+            url: core.url.join(
+                (await core.Supplier.get(this._options.baseUrl)) ??
+                    (await core.Supplier.get(this._options.environment)) ??
+                    environments.SchedulinEnvironment.Default,
+                "v0/media/register",
+            ),
+            method: "POST",
+            headers: _headers,
+            contentType: "application/json",
+            queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
+            requestType: "json",
+            body: mergeAdditionalBodyParameters(request, requestOptions?.additionalBodyParameters),
+            timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
+            maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
+            abortSignal: requestOptions?.abortSignal,
+            fetchFn: this._options?.fetch,
+            logging: this._options.logging,
+        });
+        if (_response.ok) {
+            return { data: _response.body as Schedulin.Media, rawResponse: _response.rawResponse };
+        }
+
+        if (_response.error.reason === "status-code") {
+            switch (_response.error.statusCode) {
+                case 400:
+                    throw new Schedulin.BadRequestError(
+                        _response.error.body as Schedulin.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 401:
+                    throw new Schedulin.UnauthorizedError(
+                        _response.error.body as Schedulin.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 403:
+                    throw new Schedulin.ForbiddenError(
+                        _response.error.body as Schedulin.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 404:
+                    throw new Schedulin.NotFoundError(
+                        _response.error.body as Schedulin.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 409:
+                    throw new Schedulin.ConflictError(
+                        _response.error.body as Schedulin.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 422:
+                    throw new Schedulin.UnprocessableEntityError(
+                        _response.error.body as Schedulin.ValidationErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 429:
+                    throw new Schedulin.TooManyRequestsError(
+                        _response.error.body as Schedulin.RateLimitErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 500:
+                    throw new Schedulin.InternalServerError(
+                        _response.error.body as Schedulin.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                default:
+                    throw new errors.SchedulinError({
+                        statusCode: _response.error.statusCode,
+                        body: _response.error.body,
+                        rawResponse: _response.rawResponse,
+                    });
+            }
+        }
+
+        return handleNonStatusCodeError(_response.error, _response.rawResponse, "POST", "/v0/media/register");
+    }
+
+    /**
      * Returns a short-lived URL to a page where the user uploads files from their device (or a pasted attachment) straight into the media library. Hand the URL to the user; once they've uploaded, call GET /v0/media (list media, newest first) and reference the returned `url` when creating a post. Use this whenever the file isn't already at a public URL.
      *
      * @param {Schedulin.CreateUploadLinkMediaRequest} request
