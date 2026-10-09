@@ -13,12 +13,21 @@ export namespace ListPlatformsResponse {
             name: string;
             comingSoon?: boolean | undefined;
             captionMaxLength?: number | undefined;
+            captionLengthUnit?: Item.CaptionLengthUnit | undefined;
+            captionMaxLengthWithMedia?: number | undefined;
             mediaRules?: Item.MediaRules | undefined;
             platformConfiguration: Item.PlatformConfiguration;
             helperEndpoints?: Item.HelperEndpoints.Item[] | undefined;
         }
 
         export namespace Item {
+            export const CaptionLengthUnit = {
+                Characters: "characters",
+                Graphemes: "graphemes",
+                CharactersEmojiBytes: "characters_emoji_bytes",
+            } as const;
+            export type CaptionLengthUnit = (typeof CaptionLengthUnit)[keyof typeof CaptionLengthUnit];
+
             export interface MediaRules {
                 min?: number | undefined;
                 max: number;
