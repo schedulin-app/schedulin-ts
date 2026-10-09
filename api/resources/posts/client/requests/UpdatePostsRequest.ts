@@ -9,6 +9,7 @@
 export interface UpdatePostsRequest {
     id: string;
     caption?: string;
+    title?: string | null;
     scheduledAt?: string | null;
     media?: UpdatePostsRequest.Media.Item[];
     platformConfiguration?: Record<string, unknown>;
