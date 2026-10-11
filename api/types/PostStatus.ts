@@ -6,5 +6,6 @@ export const PostStatus = {
     Completed: "COMPLETED",
     Draft: "DRAFT",
     Failed: "FAILED",
+    Deleted: "DELETED",
 } as const;
 export type PostStatus = (typeof PostStatus)[keyof typeof PostStatus];
