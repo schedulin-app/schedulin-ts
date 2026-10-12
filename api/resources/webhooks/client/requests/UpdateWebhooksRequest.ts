@@ -23,6 +23,7 @@ export namespace UpdateWebhooksRequest {
             PostFailed: "post.failed",
             GenerationCompleted: "generation.completed",
             GenerationFailed: "generation.failed",
+            SocialAccountConnected: "social_account.connected",
         } as const;
         export type Item = (typeof Item)[keyof typeof Item];
     }
