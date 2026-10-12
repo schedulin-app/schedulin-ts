@@ -1080,6 +1080,123 @@ export class PostsClient {
     }
 
     /**
+     * Re-queue a FAILED post for publishing, immediately or at a future scheduledAt. Refuses posts that were already published. If the last attempt's outcome is unknown (it may have posted), responds 412 until called again with force: true — check the platform first.
+     *
+     * @param {Schedulin.RetryPostsRequest} request
+     * @param {PostsClient.RequestOptions} requestOptions - Request-specific configuration.
+     *
+     * @throws {@link Schedulin.BadRequestError}
+     * @throws {@link Schedulin.UnauthorizedError}
+     * @throws {@link Schedulin.ForbiddenError}
+     * @throws {@link Schedulin.NotFoundError}
+     * @throws {@link Schedulin.ConflictError}
+     * @throws {@link Schedulin.UnprocessableEntityError}
+     * @throws {@link Schedulin.TooManyRequestsError}
+     * @throws {@link Schedulin.InternalServerError}
+     * @throws {@link errors.SchedulinError}
+     * @throws {@link errors.SchedulinTimeoutError}
+     *
+     * @example
+     *     await client.posts.retry({
+     *         id: "id"
+     *     })
+     */
+    public retry(
+        request: Schedulin.RetryPostsRequest,
+        requestOptions?: PostsClient.RequestOptions,
+    ): core.HttpResponsePromise<Schedulin.Post> {
+        return core.HttpResponsePromise.fromPromise(this.__retry(request, requestOptions));
+    }
+
+    private async __retry(
+        request: Schedulin.RetryPostsRequest,
+        requestOptions?: PostsClient.RequestOptions,
+    ): Promise<core.WithRawResponse<Schedulin.Post>> {
+        const { id, ..._body } = request;
+        const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
+        const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            _authRequest.headers,
+            this._options?.headers,
+            requestOptions?.headers,
+        );
+        const _response = await core.fetcher({
+            url: core.url.join(
+                (await core.Supplier.get(this._options.baseUrl)) ??
+                    (await core.Supplier.get(this._options.environment)) ??
+                    environments.SchedulinEnvironment.Default,
+                `v0/posts/${core.url.encodePathParam(id)}/retry`,
+            ),
+            method: "POST",
+            headers: _headers,
+            contentType: "application/json",
+            queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
+            requestType: "json",
+            body: mergeAdditionalBodyParameters(_body, requestOptions?.additionalBodyParameters),
+            timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
+            maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
+            abortSignal: requestOptions?.abortSignal,
+            fetchFn: this._options?.fetch,
+            logging: this._options.logging,
+        });
+        if (_response.ok) {
+            return { data: _response.body as Schedulin.Post, rawResponse: _response.rawResponse };
+        }
+
+        if (_response.error.reason === "status-code") {
+            switch (_response.error.statusCode) {
+                case 400:
+                    throw new Schedulin.BadRequestError(
+                        _response.error.body as Schedulin.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 401:
+                    throw new Schedulin.UnauthorizedError(
+                        _response.error.body as Schedulin.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 403:
+                    throw new Schedulin.ForbiddenError(
+                        _response.error.body as Schedulin.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 404:
+                    throw new Schedulin.NotFoundError(
+                        _response.error.body as Schedulin.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 409:
+                    throw new Schedulin.ConflictError(
+                        _response.error.body as Schedulin.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 422:
+                    throw new Schedulin.UnprocessableEntityError(
+                        _response.error.body as Schedulin.ValidationErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 429:
+                    throw new Schedulin.TooManyRequestsError(
+                        _response.error.body as Schedulin.RateLimitErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 500:
+                    throw new Schedulin.InternalServerError(
+                        _response.error.body as Schedulin.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                default:
+                    throw new errors.SchedulinError({
+                        statusCode: _response.error.statusCode,
+                        body: _response.error.body,
+                        rawResponse: _response.rawResponse,
+                    });
+            }
+        }
+
+        return handleNonStatusCodeError(_response.error, _response.rawResponse, "POST", "/v0/posts/{id}/retry");
+    }
+
+    /**
      * Replace all tags on a post. No status restrictions apply.
      *
      * @param {Schedulin.UpdateTagsPostsRequest} request

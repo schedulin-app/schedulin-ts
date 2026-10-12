@@ -12,6 +12,7 @@ export * from "./Post.js";
 export * from "./PostApprovalStatus.js";
 export * from "./PostMedia.js";
 export * from "./PostPublishDraft.js";
+export * from "./PostRetry.js";
 export * from "./PostSearch.js";
 export * from "./PostStatus.js";
 export * from "./PostThreadPart.js";

@@ -6,5 +6,6 @@ export type { ListPostsRequest } from "./ListPostsRequest.js";
 export { PostCreate } from "./PostCreate.js";
 export type { PublishDraftPostsRequest } from "./PublishDraftPostsRequest.js";
 export type { RetrievePostsRequest } from "./RetrievePostsRequest.js";
+export type { RetryPostsRequest } from "./RetryPostsRequest.js";
 export { UpdatePostsRequest } from "./UpdatePostsRequest.js";
 export type { UpdateTagsPostsRequest } from "./UpdateTagsPostsRequest.js";
