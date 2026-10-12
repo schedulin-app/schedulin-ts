@@ -4,6 +4,7 @@ import { AiClient } from "./api/resources/ai/client/Client.js";
 import { MediaClient } from "./api/resources/media/client/Client.js";
 import { PlatformsClient } from "./api/resources/platforms/client/Client.js";
 import { PostsClient } from "./api/resources/posts/client/Client.js";
+import { ProfilesClient } from "./api/resources/profiles/client/Client.js";
 import { SocialAccountsClient } from "./api/resources/socialAccounts/client/Client.js";
 import { TagsClient } from "./api/resources/tags/client/Client.js";
 import { WebhooksClient } from "./api/resources/webhooks/client/Client.js";
@@ -26,6 +27,7 @@ export class SchedulinClient {
     protected _platforms: PlatformsClient | undefined;
     protected _ai: AiClient | undefined;
     protected _webhooks: WebhooksClient | undefined;
+    protected _profiles: ProfilesClient | undefined;
 
     constructor(options: SchedulinClient.Options) {
         this._options = normalizeClientOptionsWithAuth(options);
@@ -57,6 +59,10 @@ export class SchedulinClient {
 
     public get webhooks(): WebhooksClient {
         return (this._webhooks ??= new WebhooksClient(this._options));
+    }
+
+    public get profiles(): ProfilesClient {
+        return (this._profiles ??= new ProfilesClient(this._options));
     }
 
     /**

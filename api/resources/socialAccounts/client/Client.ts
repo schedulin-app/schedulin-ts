@@ -26,6 +26,7 @@ export class SocialAccountsClient {
     /**
      * Retrieve all connected social media accounts for the authenticated user
      *
+     * @param {Schedulin.ListSocialAccountsRequest} request
      * @param {SocialAccountsClient.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link Schedulin.BadRequestError}
@@ -41,14 +42,20 @@ export class SocialAccountsClient {
      *     await client.socialAccounts.list()
      */
     public list(
+        request: Schedulin.ListSocialAccountsRequest = {},
         requestOptions?: SocialAccountsClient.RequestOptions,
     ): core.HttpResponsePromise<Schedulin.ListSocialAccountsResponse> {
-        return core.HttpResponsePromise.fromPromise(this.__list(requestOptions));
+        return core.HttpResponsePromise.fromPromise(this.__list(request, requestOptions));
     }
 
     private async __list(
+        request: Schedulin.ListSocialAccountsRequest = {},
         requestOptions?: SocialAccountsClient.RequestOptions,
     ): Promise<core.WithRawResponse<Schedulin.ListSocialAccountsResponse>> {
+        const { profileId } = request;
+        const _queryParams: Record<string, unknown> = {
+            profileId,
+        };
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
         const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             _authRequest.headers,
@@ -64,7 +71,11 @@ export class SocialAccountsClient {
             ),
             method: "GET",
             headers: _headers,
-            queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
+            queryString: core.url
+                .queryBuilder()
+                .addMany(_queryParams)
+                .mergeAdditional(requestOptions?.queryParams)
+                .build(),
             timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
             maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
             abortSignal: requestOptions?.abortSignal,

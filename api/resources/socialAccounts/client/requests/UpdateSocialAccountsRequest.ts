@@ -9,6 +9,8 @@
 export interface UpdateSocialAccountsRequest {
     id: string;
     status?: UpdateSocialAccountsRequest.Status;
+    /** Move the account into a client profile (profile id or externalId), or null to remove it from its profile. Pro plan. */
+    profileId?: string | null;
 }
 
 export namespace UpdateSocialAccountsRequest {

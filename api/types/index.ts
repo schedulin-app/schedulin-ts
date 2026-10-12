@@ -1,5 +1,6 @@
 export * from "./AiGeneration.js";
 export * from "./AnalyticsStatus.js";
+export * from "./ClientProfile.js";
 export * from "./ErrorResponse.js";
 export * from "./ImageProcessingStatus.js";
 export * from "./ListPostsRequestScheduledAt.js";

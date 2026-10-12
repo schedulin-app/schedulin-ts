@@ -21,6 +21,7 @@ export namespace ListSocialAccountsResponse {
             refreshTokenValid: boolean;
             analyticsDisabledAt: string | null;
             webhookSubscriptionFailedAt: string | null;
+            profileId: string | null;
             createdAt: string;
             updatedAt: string;
         }
