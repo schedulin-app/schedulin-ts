@@ -1,4 +1,5 @@
 export * from "./DeleteSocialAccountsResponse.js";
+export * from "./GetQueueScheduleSocialAccountsResponse.js";
 export * from "./ListDiscordChannelsSocialAccountsResponse.js";
 export * from "./ListSlackChannelsSocialAccountsResponse.js";
 export * from "./ListSocialAccountsResponse.js";
@@ -6,6 +7,7 @@ export * from "./ListWhopCompaniesSocialAccountsResponse.js";
 export * from "./ListWhopForumsSocialAccountsResponse.js";
 export * from "./NextSlotsSocialAccountsResponse.js";
 export * from "./PinterestBoardsSocialAccountsResponse.js";
+export * from "./ReplaceQueueScheduleSocialAccountsResponse.js";
 export * from "./TiktokCreatorInfoSocialAccountsResponse.js";
 export * from "./UpdateSocialAccountsResponse.js";
 export * from "./UpdateTimezoneSocialAccountsResponse.js";

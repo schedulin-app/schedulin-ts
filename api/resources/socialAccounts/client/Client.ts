@@ -1100,6 +1100,251 @@ export class SocialAccountsClient {
     }
 
     /**
+     * Return the weekly posting schedule that `action: "queue"` fills: each slot's weekday (0 = Sunday), wall-clock `time` (HH:MM) and `capacity`, interpreted in the account's `timezone`. Empty `times` means the account has no queue configured.
+     *
+     * @param {Schedulin.GetQueueScheduleSocialAccountsRequest} request
+     * @param {SocialAccountsClient.RequestOptions} requestOptions - Request-specific configuration.
+     *
+     * @throws {@link Schedulin.BadRequestError}
+     * @throws {@link Schedulin.UnauthorizedError}
+     * @throws {@link Schedulin.ForbiddenError}
+     * @throws {@link Schedulin.NotFoundError}
+     * @throws {@link Schedulin.UnprocessableEntityError}
+     * @throws {@link Schedulin.TooManyRequestsError}
+     * @throws {@link Schedulin.InternalServerError}
+     * @throws {@link errors.SchedulinError}
+     * @throws {@link errors.SchedulinTimeoutError}
+     *
+     * @example
+     *     await client.socialAccounts.getQueueSchedule({
+     *         id: "id"
+     *     })
+     */
+    public getQueueSchedule(
+        request: Schedulin.GetQueueScheduleSocialAccountsRequest,
+        requestOptions?: SocialAccountsClient.RequestOptions,
+    ): core.HttpResponsePromise<Schedulin.GetQueueScheduleSocialAccountsResponse> {
+        return core.HttpResponsePromise.fromPromise(this.__getQueueSchedule(request, requestOptions));
+    }
+
+    private async __getQueueSchedule(
+        request: Schedulin.GetQueueScheduleSocialAccountsRequest,
+        requestOptions?: SocialAccountsClient.RequestOptions,
+    ): Promise<core.WithRawResponse<Schedulin.GetQueueScheduleSocialAccountsResponse>> {
+        const { id } = request;
+        const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
+        const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            _authRequest.headers,
+            this._options?.headers,
+            requestOptions?.headers,
+        );
+        const _response = await core.fetcher({
+            url: core.url.join(
+                (await core.Supplier.get(this._options.baseUrl)) ??
+                    (await core.Supplier.get(this._options.environment)) ??
+                    environments.SchedulinEnvironment.Default,
+                `v0/social-accounts/${core.url.encodePathParam(id)}/queue-schedule`,
+            ),
+            method: "GET",
+            headers: _headers,
+            queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
+            timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
+            maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
+            abortSignal: requestOptions?.abortSignal,
+            fetchFn: this._options?.fetch,
+            logging: this._options.logging,
+        });
+        if (_response.ok) {
+            return {
+                data: _response.body as Schedulin.GetQueueScheduleSocialAccountsResponse,
+                rawResponse: _response.rawResponse,
+            };
+        }
+
+        if (_response.error.reason === "status-code") {
+            switch (_response.error.statusCode) {
+                case 400:
+                    throw new Schedulin.BadRequestError(
+                        _response.error.body as Schedulin.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 401:
+                    throw new Schedulin.UnauthorizedError(
+                        _response.error.body as Schedulin.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 403:
+                    throw new Schedulin.ForbiddenError(
+                        _response.error.body as Schedulin.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 404:
+                    throw new Schedulin.NotFoundError(
+                        _response.error.body as Schedulin.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 422:
+                    throw new Schedulin.UnprocessableEntityError(
+                        _response.error.body as Schedulin.ValidationErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 429:
+                    throw new Schedulin.TooManyRequestsError(
+                        _response.error.body as Schedulin.RateLimitErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 500:
+                    throw new Schedulin.InternalServerError(
+                        _response.error.body as Schedulin.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                default:
+                    throw new errors.SchedulinError({
+                        statusCode: _response.error.statusCode,
+                        body: _response.error.body,
+                        rawResponse: _response.rawResponse,
+                    });
+            }
+        }
+
+        return handleNonStatusCodeError(
+            _response.error,
+            _response.rawResponse,
+            "GET",
+            "/v0/social-accounts/{id}/queue-schedule",
+        );
+    }
+
+    /**
+     * Replace the account's whole weekly posting schedule with `times` (send an empty array to clear it). Times are wall-clock HH:MM in the account's timezone — change that with `PUT /v0/social-accounts/{id}/timezone`. Posts already scheduled keep their times; only future `action: "queue"` placements use the new schedule. Returns the saved schedule.
+     *
+     * @param {Schedulin.ReplaceQueueScheduleSocialAccountsRequest} request
+     * @param {SocialAccountsClient.RequestOptions} requestOptions - Request-specific configuration.
+     *
+     * @throws {@link Schedulin.BadRequestError}
+     * @throws {@link Schedulin.UnauthorizedError}
+     * @throws {@link Schedulin.ForbiddenError}
+     * @throws {@link Schedulin.NotFoundError}
+     * @throws {@link Schedulin.ConflictError}
+     * @throws {@link Schedulin.UnprocessableEntityError}
+     * @throws {@link Schedulin.TooManyRequestsError}
+     * @throws {@link Schedulin.InternalServerError}
+     * @throws {@link errors.SchedulinError}
+     * @throws {@link errors.SchedulinTimeoutError}
+     *
+     * @example
+     *     await client.socialAccounts.replaceQueueSchedule({
+     *         id: "id",
+     *         times: [{
+     *                 weekday: 1,
+     *                 time: "time"
+     *             }]
+     *     })
+     */
+    public replaceQueueSchedule(
+        request: Schedulin.ReplaceQueueScheduleSocialAccountsRequest,
+        requestOptions?: SocialAccountsClient.RequestOptions,
+    ): core.HttpResponsePromise<Schedulin.ReplaceQueueScheduleSocialAccountsResponse> {
+        return core.HttpResponsePromise.fromPromise(this.__replaceQueueSchedule(request, requestOptions));
+    }
+
+    private async __replaceQueueSchedule(
+        request: Schedulin.ReplaceQueueScheduleSocialAccountsRequest,
+        requestOptions?: SocialAccountsClient.RequestOptions,
+    ): Promise<core.WithRawResponse<Schedulin.ReplaceQueueScheduleSocialAccountsResponse>> {
+        const { id, ..._body } = request;
+        const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
+        const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            _authRequest.headers,
+            this._options?.headers,
+            requestOptions?.headers,
+        );
+        const _response = await core.fetcher({
+            url: core.url.join(
+                (await core.Supplier.get(this._options.baseUrl)) ??
+                    (await core.Supplier.get(this._options.environment)) ??
+                    environments.SchedulinEnvironment.Default,
+                `v0/social-accounts/${core.url.encodePathParam(id)}/queue-schedule`,
+            ),
+            method: "PUT",
+            headers: _headers,
+            contentType: "application/json",
+            queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
+            requestType: "json",
+            body: mergeAdditionalBodyParameters(_body, requestOptions?.additionalBodyParameters),
+            timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
+            maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
+            abortSignal: requestOptions?.abortSignal,
+            fetchFn: this._options?.fetch,
+            logging: this._options.logging,
+        });
+        if (_response.ok) {
+            return {
+                data: _response.body as Schedulin.ReplaceQueueScheduleSocialAccountsResponse,
+                rawResponse: _response.rawResponse,
+            };
+        }
+
+        if (_response.error.reason === "status-code") {
+            switch (_response.error.statusCode) {
+                case 400:
+                    throw new Schedulin.BadRequestError(
+                        _response.error.body as Schedulin.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 401:
+                    throw new Schedulin.UnauthorizedError(
+                        _response.error.body as Schedulin.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 403:
+                    throw new Schedulin.ForbiddenError(
+                        _response.error.body as Schedulin.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 404:
+                    throw new Schedulin.NotFoundError(
+                        _response.error.body as Schedulin.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 409:
+                    throw new Schedulin.ConflictError(
+                        _response.error.body as Schedulin.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 422:
+                    throw new Schedulin.UnprocessableEntityError(
+                        _response.error.body as Schedulin.ValidationErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 429:
+                    throw new Schedulin.TooManyRequestsError(
+                        _response.error.body as Schedulin.RateLimitErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 500:
+                    throw new Schedulin.InternalServerError(
+                        _response.error.body as Schedulin.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                default:
+                    throw new errors.SchedulinError({
+                        statusCode: _response.error.statusCode,
+                        body: _response.error.body,
+                        rawResponse: _response.rawResponse,
+                    });
+            }
+        }
+
+        return handleNonStatusCodeError(
+            _response.error,
+            _response.rawResponse,
+            "PUT",
+            "/v0/social-accounts/{id}/queue-schedule",
+        );
+    }
+
+    /**
      * List the boards for a connected Pinterest account. Use a board id in `platformConfiguration.board_ids` when creating a Pinterest post.
      *
      * @param {Schedulin.PinterestBoardsSocialAccountsRequest} request

@@ -1,4 +1,5 @@
 export type { DeleteSocialAccountsRequest } from "./DeleteSocialAccountsRequest.js";
+export type { GetQueueScheduleSocialAccountsRequest } from "./GetQueueScheduleSocialAccountsRequest.js";
 export type { ListDiscordChannelsSocialAccountsRequest } from "./ListDiscordChannelsSocialAccountsRequest.js";
 export type { ListSlackChannelsSocialAccountsRequest } from "./ListSlackChannelsSocialAccountsRequest.js";
 export type { ListSocialAccountsRequest } from "./ListSocialAccountsRequest.js";
@@ -6,6 +7,7 @@ export type { ListWhopCompaniesSocialAccountsRequest } from "./ListWhopCompanies
 export type { ListWhopForumsSocialAccountsRequest } from "./ListWhopForumsSocialAccountsRequest.js";
 export type { NextSlotsSocialAccountsRequest } from "./NextSlotsSocialAccountsRequest.js";
 export type { PinterestBoardsSocialAccountsRequest } from "./PinterestBoardsSocialAccountsRequest.js";
+export type { ReplaceQueueScheduleSocialAccountsRequest } from "./ReplaceQueueScheduleSocialAccountsRequest.js";
 export type { TiktokCreatorInfoSocialAccountsRequest } from "./TiktokCreatorInfoSocialAccountsRequest.js";
 export { UpdateSocialAccountsRequest } from "./UpdateSocialAccountsRequest.js";
 export type { UpdateTimezoneSocialAccountsRequest } from "./UpdateTimezoneSocialAccountsRequest.js";
