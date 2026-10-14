@@ -1,6 +1,9 @@
 export * from "./ai/client/requests/index.js";
 export * as ai from "./ai/index.js";
 export * from "./ai/types/index.js";
+export * from "./analytics/client/requests/index.js";
+export * as analytics from "./analytics/index.js";
+export * from "./analytics/types/index.js";
 export * from "./media/client/requests/index.js";
 export * as media from "./media/index.js";
 export * from "./media/types/index.js";
