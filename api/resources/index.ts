@@ -24,3 +24,5 @@ export * from "./tags/types/index.js";
 export * from "./webhooks/client/requests/index.js";
 export * as webhooks from "./webhooks/index.js";
 export * from "./webhooks/types/index.js";
+export * as workspace from "./workspace/index.js";
+export * from "./workspace/types/index.js";

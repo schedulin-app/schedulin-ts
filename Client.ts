@@ -9,6 +9,7 @@ import { ProfilesClient } from "./api/resources/profiles/client/Client.js";
 import { SocialAccountsClient } from "./api/resources/socialAccounts/client/Client.js";
 import { TagsClient } from "./api/resources/tags/client/Client.js";
 import { WebhooksClient } from "./api/resources/webhooks/client/Client.js";
+import { WorkspaceClient } from "./api/resources/workspace/client/Client.js";
 import type { BaseClientOptions, BaseRequestOptions } from "./BaseClient.js";
 import { type NormalizedClientOptionsWithAuth, normalizeClientOptionsWithAuth } from "./BaseClient.js";
 import * as core from "./core/index.js";
@@ -29,6 +30,7 @@ export class SchedulinClient {
     protected _ai: AiClient | undefined;
     protected _webhooks: WebhooksClient | undefined;
     protected _profiles: ProfilesClient | undefined;
+    protected _workspace: WorkspaceClient | undefined;
     protected _analytics: AnalyticsClient | undefined;
 
     constructor(options: SchedulinClient.Options) {
@@ -65,6 +67,10 @@ export class SchedulinClient {
 
     public get profiles(): ProfilesClient {
         return (this._profiles ??= new ProfilesClient(this._options));
+    }
+
+    public get workspace(): WorkspaceClient {
+        return (this._workspace ??= new WorkspaceClient(this._options));
     }
 
     public get analytics(): AnalyticsClient {
