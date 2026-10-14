@@ -2,7 +2,7 @@
 
 export interface OverviewAnalyticsResponse {
     totals: OverviewAnalyticsResponse.Totals;
-    /** Percent change vs the previous window of the same length; null when the previous window was zero */
+    /** Percent change vs the previous window of the same length: 0 when both windows are zero, null when only the previous window is zero */
     trend: OverviewAnalyticsResponse.Trend;
 }
 
@@ -24,7 +24,7 @@ export namespace OverviewAnalyticsResponse {
     }
 
     /**
-     * Percent change vs the previous window of the same length; null when the previous window was zero
+     * Percent change vs the previous window of the same length: 0 when both windows are zero, null when only the previous window is zero
      */
     export interface Trend {
         impressions: number | null;
