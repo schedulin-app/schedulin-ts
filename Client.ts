@@ -2,6 +2,7 @@
 
 import { AiClient } from "./api/resources/ai/client/Client.js";
 import { AnalyticsClient } from "./api/resources/analytics/client/Client.js";
+import { IdeasClient } from "./api/resources/ideas/client/Client.js";
 import { MediaClient } from "./api/resources/media/client/Client.js";
 import { PlatformsClient } from "./api/resources/platforms/client/Client.js";
 import { PostsClient } from "./api/resources/posts/client/Client.js";
@@ -30,6 +31,7 @@ export class SchedulinClient {
     protected _ai: AiClient | undefined;
     protected _webhooks: WebhooksClient | undefined;
     protected _profiles: ProfilesClient | undefined;
+    protected _ideas: IdeasClient | undefined;
     protected _workspace: WorkspaceClient | undefined;
     protected _analytics: AnalyticsClient | undefined;
 
@@ -67,6 +69,10 @@ export class SchedulinClient {
 
     public get profiles(): ProfilesClient {
         return (this._profiles ??= new ProfilesClient(this._options));
+    }
+
+    public get ideas(): IdeasClient {
+        return (this._ideas ??= new IdeasClient(this._options));
     }
 
     public get workspace(): WorkspaceClient {
