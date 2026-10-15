@@ -11,6 +11,7 @@ export * from "./MediaUpdate.js";
 export * from "./OauthScope.js";
 export * from "./Post.js";
 export * from "./PostApprovalStatus.js";
+export * from "./PostCreate.js";
 export * from "./PostMedia.js";
 export * from "./PostPublishDraft.js";
 export * from "./PostRetry.js";

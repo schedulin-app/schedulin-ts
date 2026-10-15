@@ -3,7 +3,6 @@ export type { AnalyticsSummaryPostsRequest } from "./AnalyticsSummaryPostsReques
 export type { CountByTabPostsRequest } from "./CountByTabPostsRequest.js";
 export type { DeletePostsRequest } from "./DeletePostsRequest.js";
 export type { ListPostsRequest } from "./ListPostsRequest.js";
-export { PostCreate } from "./PostCreate.js";
 export type { PublishDraftPostsRequest } from "./PublishDraftPostsRequest.js";
 export type { RetrievePostsRequest } from "./RetrievePostsRequest.js";
 export type { RetryPostsRequest } from "./RetryPostsRequest.js";

@@ -27,6 +27,8 @@ export namespace ClientProfile {
             analyticsDisabledAt: string | null;
             webhookSubscriptionFailedAt: string | null;
             profileId: string | null;
+            /** The platform profile whose login connected this account (e.g. the Facebook user a Page was connected through). Null when unknown. */
+            connectedVia: Item.ConnectedVia | null;
             createdAt: string;
             updatedAt: string;
         }
@@ -72,6 +74,11 @@ export namespace ClientProfile {
                 Disconnected: "disconnected",
             } as const;
             export type Status = (typeof Status)[keyof typeof Status];
+
+            export interface ConnectedVia {
+                id: string;
+                name: string;
+            }
         }
     }
 }

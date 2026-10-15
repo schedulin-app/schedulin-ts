@@ -5,6 +5,7 @@ import { AnalyticsClient } from "./api/resources/analytics/client/Client.js";
 import { IdeasClient } from "./api/resources/ideas/client/Client.js";
 import { MediaClient } from "./api/resources/media/client/Client.js";
 import { PlatformsClient } from "./api/resources/platforms/client/Client.js";
+import { PostGroupsClient } from "./api/resources/postGroups/client/Client.js";
 import { PostsClient } from "./api/resources/posts/client/Client.js";
 import { ProfilesClient } from "./api/resources/profiles/client/Client.js";
 import { SocialAccountsClient } from "./api/resources/socialAccounts/client/Client.js";
@@ -24,6 +25,7 @@ export declare namespace SchedulinClient {
 export class SchedulinClient {
     protected readonly _options: NormalizedClientOptionsWithAuth<SchedulinClient.Options>;
     protected _posts: PostsClient | undefined;
+    protected _postGroups: PostGroupsClient | undefined;
     protected _socialAccounts: SocialAccountsClient | undefined;
     protected _tags: TagsClient | undefined;
     protected _media: MediaClient | undefined;
@@ -41,6 +43,10 @@ export class SchedulinClient {
 
     public get posts(): PostsClient {
         return (this._posts ??= new PostsClient(this._options));
+    }
+
+    public get postGroups(): PostGroupsClient {
+        return (this._postGroups ??= new PostGroupsClient(this._options));
     }
 
     public get socialAccounts(): SocialAccountsClient {
