@@ -22,6 +22,8 @@ export namespace ClientProfile {
             disconnectedReason: Schedulin.SocialAccountDisconnectedReason | null;
             username: string | null;
             displayName: string | null;
+            /** The account's platform @handle when known (e.g. TikTok username), without the @. Null when unknown. */
+            handle: string | null;
             profileImageUrl: string | null;
             refreshTokenValid: boolean;
             analyticsDisabledAt: string | null;
