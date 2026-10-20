@@ -58,6 +58,7 @@ export namespace CreatePostsResponse {
                         Snapchat: "snapchat",
                         Threads: "threads",
                         Tiktok: "tiktok",
+                        TiktokBusiness: "tiktok_business",
                         Twitter: "twitter",
                         Youtube: "youtube",
                         Mastodon: "mastodon",
