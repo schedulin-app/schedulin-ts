@@ -11,4 +11,49 @@ export interface CreateFromUrlMediaRequest {
     name?: string;
     alt?: string | null;
     contentType?: string;
+    /** Opt-in. Platforms the image will be posted to (e.g. ["instagram", "tiktok"]). The image is scaled down and/or re-encoded to fit the strictest of their size, dimension and format limits before it is stored. The original bytes are kept when the image already fits, or when none of the listed platforms has known image limits, so this is not a guaranteed conversion. Images only: videos and animated GIFs are stored as-is. Images over 50 MB or 100 megapixels are rejected when a listed platform has known image limits; import them without fitToPlatforms or shrink them first. Omit to store the file unchanged. */
+    fitToPlatforms?: CreateFromUrlMediaRequest.FitToPlatforms.Item[];
+}
+
+export namespace CreateFromUrlMediaRequest {
+    export type FitToPlatforms = FitToPlatforms.Item[];
+
+    export namespace FitToPlatforms {
+        export const Item = {
+            Bluesky: "bluesky",
+            Facebook: "facebook",
+            GoogleBusinessProfile: "google_business_profile",
+            Instagram: "instagram",
+            Linkedin: "linkedin",
+            Pinterest: "pinterest",
+            Reddit: "reddit",
+            Snapchat: "snapchat",
+            Threads: "threads",
+            Tiktok: "tiktok",
+            TiktokBusiness: "tiktok_business",
+            Twitter: "twitter",
+            Youtube: "youtube",
+            Mastodon: "mastodon",
+            Telegram: "telegram",
+            Devto: "devto",
+            Hashnode: "hashnode",
+            Medium: "medium",
+            Wordpress: "wordpress",
+            Lemmy: "lemmy",
+            Nostr: "nostr",
+            Discord: "discord",
+            Dribbble: "dribbble",
+            Farcaster: "farcaster",
+            Kick: "kick",
+            Listmonk: "listmonk",
+            Mewe: "mewe",
+            Moltbook: "moltbook",
+            Skool: "skool",
+            Slack: "slack",
+            Twitch: "twitch",
+            Vk: "vk",
+            Whop: "whop",
+        } as const;
+        export type Item = (typeof Item)[keyof typeof Item];
+    }
 }

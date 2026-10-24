@@ -1,4 +1,4 @@
-export type { CreateFromUrlMediaRequest } from "./CreateFromUrlMediaRequest.js";
+export { CreateFromUrlMediaRequest } from "./CreateFromUrlMediaRequest.js";
 export { CreatePresignedPost } from "./CreatePresignedPost.js";
 export type { CreateUploadLinkMediaRequest } from "./CreateUploadLinkMediaRequest.js";
 export type { DeleteMediaRequest } from "./DeleteMediaRequest.js";
