@@ -10,6 +10,7 @@
 export interface CreatePresignedPost {
     contentType: string;
     key: string;
+    /** File size in bytes. When set, the presigned URL only accepts an upload of exactly this many bytes. */
     size?: number;
     intent?: CreatePresignedPost.Intent;
 }
@@ -17,7 +18,6 @@ export interface CreatePresignedPost {
 export namespace CreatePresignedPost {
     export const Intent = {
         Post: "post",
-        ClipSource: "clip-source",
         PublicAsset: "public-asset",
     } as const;
     export type Intent = (typeof Intent)[keyof typeof Intent];
