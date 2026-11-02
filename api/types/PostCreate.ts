@@ -30,6 +30,8 @@ export namespace PostCreate {
             height?: number | undefined;
             size?: number | undefined;
             duration?: number | undefined;
+            /** This photo's own caption in this post. Facebook photo posts show it when the photo is opened; Pinterest carousel Pins show it on that slide (up to 800 characters); Reddit galleries show it under that image (up to 180). Other platforms ignore it. */
+            caption?: (string | null) | undefined;
         }
 
         export namespace Item {
@@ -104,6 +106,8 @@ export namespace PostCreate {
         height?: number | undefined;
         size?: number | undefined;
         duration?: number | undefined;
+        /** This photo's own caption in this post. Facebook photo posts show it when the photo is opened; Pinterest carousel Pins show it on that slide (up to 800 characters); Reddit galleries show it under that image (up to 180). Other platforms ignore it. */
+        caption?: (string | null) | undefined;
     }
 
     export namespace Thumbnail {
@@ -196,6 +200,8 @@ export namespace PostCreate {
                     height?: number | undefined;
                     size?: number | undefined;
                     duration?: number | undefined;
+                    /** This photo's own caption in this post. Facebook photo posts show it when the photo is opened; Pinterest carousel Pins show it on that slide (up to 800 characters); Reddit galleries show it under that image (up to 180). Other platforms ignore it. */
+                    caption?: (string | null) | undefined;
                 }
 
                 export namespace Item {

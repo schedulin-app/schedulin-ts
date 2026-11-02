@@ -32,6 +32,7 @@ export namespace UpdatePostsRequest {
             size?: (number | null) | undefined;
             duration?: (number | null) | undefined;
             alt?: (string | null) | undefined;
+            caption?: (string | null) | undefined;
             tags?: (Item.Tags.Item[] | null) | undefined;
             bucket?: string | undefined;
             key?: string | undefined;
@@ -124,6 +125,7 @@ export namespace UpdatePostsRequest {
                     size?: (number | null) | undefined;
                     duration?: (number | null) | undefined;
                     alt?: (string | null) | undefined;
+                    caption?: (string | null) | undefined;
                     tags?: (Item.Tags.Item[] | null) | undefined;
                     bucket?: string | undefined;
                     key?: string | undefined;
