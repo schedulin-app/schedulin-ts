@@ -26,6 +26,7 @@ export namespace CreatePostsResponse {
             thumbnail_timestamp_ms?: (number | null) | undefined;
             tags?: Item.Tags.Item[] | undefined;
             alt?: (string | null) | undefined;
+            /** Publish this file exactly as uploaded: no conversion, remux or re-encode before publishing. Use only for files you know the platform accepts (e.g. a web-ready H.264/AAC MP4 or a JPEG/PNG); an unsupported format will be rejected by the platform at publish. */
             skip_processing?: boolean | undefined;
         }
 

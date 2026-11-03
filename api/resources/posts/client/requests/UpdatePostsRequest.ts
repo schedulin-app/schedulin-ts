@@ -34,6 +34,8 @@ export namespace UpdatePostsRequest {
             alt?: (string | null) | undefined;
             caption?: (string | null) | undefined;
             tags?: (Item.Tags.Item[] | null) | undefined;
+            /** Publish this file exactly as uploaded: no conversion, remux or re-encode before publishing. Use only for files you know the platform accepts (e.g. a web-ready H.264/AAC MP4 or a JPEG/PNG); an unsupported format will be rejected by the platform at publish. */
+            skip_processing?: boolean | undefined;
             bucket?: string | undefined;
             key?: string | undefined;
         }
@@ -127,6 +129,8 @@ export namespace UpdatePostsRequest {
                     alt?: (string | null) | undefined;
                     caption?: (string | null) | undefined;
                     tags?: (Item.Tags.Item[] | null) | undefined;
+                    /** Publish this file exactly as uploaded: no conversion, remux or re-encode before publishing. Use only for files you know the platform accepts (e.g. a web-ready H.264/AAC MP4 or a JPEG/PNG); an unsupported format will be rejected by the platform at publish. */
+                    skip_processing?: boolean | undefined;
                     bucket?: string | undefined;
                     key?: string | undefined;
                 }
