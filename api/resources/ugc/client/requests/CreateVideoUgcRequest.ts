@@ -62,7 +62,6 @@ export namespace CreateVideoUgcRequest {
     export type VoiceId = (typeof VoiceId)[keyof typeof VoiceId];
     export const Resolution = {
         SevenHundredTwentyP: "720p",
-        OneThousandEightyP: "1080p",
     } as const;
     export type Resolution = (typeof Resolution)[keyof typeof Resolution];
 
