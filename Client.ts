@@ -10,6 +10,7 @@ import { PostsClient } from "./api/resources/posts/client/Client.js";
 import { ProfilesClient } from "./api/resources/profiles/client/Client.js";
 import { SocialAccountsClient } from "./api/resources/socialAccounts/client/Client.js";
 import { TagsClient } from "./api/resources/tags/client/Client.js";
+import { UgcClient } from "./api/resources/ugc/client/Client.js";
 import { WebhooksClient } from "./api/resources/webhooks/client/Client.js";
 import { WorkspaceClient } from "./api/resources/workspace/client/Client.js";
 import type { BaseClientOptions, BaseRequestOptions } from "./BaseClient.js";
@@ -31,6 +32,7 @@ export class SchedulinClient {
     protected _media: MediaClient | undefined;
     protected _platforms: PlatformsClient | undefined;
     protected _ai: AiClient | undefined;
+    protected _ugc: UgcClient | undefined;
     protected _webhooks: WebhooksClient | undefined;
     protected _profiles: ProfilesClient | undefined;
     protected _ideas: IdeasClient | undefined;
@@ -67,6 +69,10 @@ export class SchedulinClient {
 
     public get ai(): AiClient {
         return (this._ai ??= new AiClient(this._options));
+    }
+
+    public get ugc(): UgcClient {
+        return (this._ugc ??= new UgcClient(this._options));
     }
 
     public get webhooks(): WebhooksClient {
