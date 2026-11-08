@@ -3,14 +3,13 @@
 /**
  * @example
  *     {
- *         contentType: "contentType",
- *         key: "key"
+ *         contentType: "contentType"
  *     }
  */
 export interface CreatePresignedPost {
     contentType: string;
-    /** Object name, e.g. the file name. Stored under your workspace with accents dropped and characters outside A-Z, a-z, 0-9, `_`, `.`, `-` replaced by `-`; use the `key` the response returns. */
-    key: string;
+    /** Optional file name. Only its extension is used, when `contentType` doesn't settle one: the server names the stored object itself. Use the `key` the response returns. */
+    key?: string;
     /** File size in bytes. When set, the presigned URL only accepts an upload of exactly this many bytes. */
     size?: number;
     intent?: CreatePresignedPost.Intent;
