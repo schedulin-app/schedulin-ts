@@ -10,6 +10,7 @@ export interface CreateFromUrlMediaRequest {
     url: string;
     name?: string;
     alt?: string | null;
+    /** Ignored: the type is read from the file's own bytes. Accepted so older clients don't break. */
     contentType?: string;
     /** Opt-in. Platforms the image will be posted to (e.g. ["instagram", "tiktok"]). The image is scaled down and/or re-encoded to fit the strictest of their size, dimension and format limits before it is stored. The original bytes are kept when the image already fits, or when none of the listed platforms has known image limits, so this is not a guaranteed conversion. Images only: videos and animated GIFs are stored as-is. Images over 50 MB or 100 megapixels are rejected when a listed platform has known image limits; import them without fitToPlatforms or shrink them first. Omit to store the file unchanged. */
     fitToPlatforms?: CreateFromUrlMediaRequest.FitToPlatforms.Item[];
